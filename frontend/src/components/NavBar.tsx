@@ -6,15 +6,15 @@ interface props {
 }
 
 interface itemProps {
-    name: string,
-    route: string
+    name: string;
+    route: string;
 }
 
 export default ({ items, selectedIndex }: props) => {
     // let items = ["🌼Home", "Scoreboard", "Challenges"];
 
     const [selectIndex, setSelectedIndex] = useState(selectedIndex);
-
+    const origin_index = selectedIndex;
     return (
         <>
             <nav>
@@ -34,7 +34,7 @@ export default ({ items, selectedIndex }: props) => {
                                     setSelectedIndex(index);
                                 }}
                                 onMouseLeave={() => {
-                                    setSelectedIndex(2);
+                                    setSelectedIndex(origin_index);
                                 }}
                             >
                                 {item.name}
