@@ -18,7 +18,7 @@ export default ({ items, selectedIndex }: props) => {
     return (
         <>
             <nav>
-                <ul className="nav justify-content-center fw-bold nav-underline">
+                <ul className="nav justify-content-center fw-bold nav-underline mt-2">
                     {items.map((item, index) => (
                         <li className="nav-item">
                             <a
@@ -34,7 +34,7 @@ export default ({ items, selectedIndex }: props) => {
                                     setSelectedIndex(index);
                                 }}
                                 onMouseLeave={() => {
-                                    setSelectedIndex(origin_index);
+                                    setSelectedIndex(selectedIndex);
                                 }}
                             >
                                 {item.name}

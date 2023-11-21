@@ -12,3 +12,7 @@ a {
 a:hover{
     color: #277edb;
 }
+
+.custom-color-999999-placeholder::placeholder { 
+    color: #999999; 
+} 
