@@ -1,3 +1,4 @@
+import Scoreboard from "../components/Scoreboard";
 export default () => {
-    return <div>Scoreboard</div>;
+  return <Scoreboard />;
 };
