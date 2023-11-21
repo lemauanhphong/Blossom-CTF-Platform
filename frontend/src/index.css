@@ -1,3 +1,7 @@
 body {
     background-color: #111111;
 }
+
+.custom-color-999999-placeholder::placeholder { 
+    color: #999999; 
+} 

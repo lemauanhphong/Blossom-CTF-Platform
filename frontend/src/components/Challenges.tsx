@@ -1,6 +1,3 @@
-import NavBar from "./NavBar";
-import { navBarItems } from "../utils";
-
 export default () => {
     let categories = [
         {
@@ -55,7 +52,6 @@ export default () => {
 
     return (
         <>
-            <NavBar items={navBarItems[true]} selectedIndex={2} />
             <div className="container">
                 <div className="row">
                     <div
