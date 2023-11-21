@@ -1,8 +1,13 @@
 import { useState } from "react";
 
 interface props {
-    items: string[];
+    items: itemProps[];
     selectedIndex: number;
+}
+
+interface itemProps {
+    name: string,
+    route: string
 }
 
 export default ({ items, selectedIndex }: props) => {
@@ -17,7 +22,7 @@ export default ({ items, selectedIndex }: props) => {
                     {items.map((item, index) => (
                         <li className="nav-item">
                             <a
-                                href="#"
+                                href={item.route}
                                 className={
                                     "nav-link" +
                                     (selectIndex !== index
@@ -32,7 +37,7 @@ export default ({ items, selectedIndex }: props) => {
                                     setSelectedIndex(2);
                                 }}
                             >
-                                {item}
+                                {item.name}
                             </a>
                         </li>
                     ))}
