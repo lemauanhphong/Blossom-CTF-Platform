@@ -1,5 +1,12 @@
 import Challenges from "../components/Challenges";
+import NavBar from "../components/NavBar";
+import { navBarItems } from "../utils";
 
 export default () => {
-    return <Challenges />;
+    return (
+        <>
+            <NavBar items={navBarItems[true]} selectedIndex={2} />
+            <Challenges />
+        </>
+    );
 };
