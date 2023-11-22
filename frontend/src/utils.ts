@@ -39,8 +39,8 @@ type StringStringObject = {
 export const request = async (
     method: string,
     endpoint: string,
-    body: StringStringObject,
-    headers: StringStringObject
+    body?: StringStringObject,
+    headers?: StringStringObject
 ) => {
     if (!headers) headers = {};
     if (!body) body = {};
@@ -50,6 +50,7 @@ export const request = async (
                 method,
                 headers: { "Content-Type": "application/json", ...headers },
                 body: JSON.stringify(body),
+                credentials: "include",
             })
         ).json();
 
