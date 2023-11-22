@@ -14,7 +14,7 @@ export default memo(({ items, selectedIndex }: props) => {
     // let items = ["🌼Home", "Scoreboard", "Challenges"];
 
     const [selectIndex, setSelectedIndex] = useState(selectedIndex);
-    const origin_index = selectedIndex;
+
     return (
         <>
             <nav>
