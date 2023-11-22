@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 
 interface props {
     items: itemProps[];
@@ -10,7 +10,7 @@ interface itemProps {
     route: string
 }
 
-export default ({ items, selectedIndex }: props) => {
+export default memo(({ items, selectedIndex }: props) => {
     // let items = ["🌼Home", "Scoreboard", "Challenges"];
 
     const [selectIndex, setSelectedIndex] = useState(selectedIndex);
@@ -49,4 +49,4 @@ export default ({ items, selectedIndex }: props) => {
             />
         </>
     );
-};
+});
