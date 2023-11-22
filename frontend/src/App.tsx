@@ -16,17 +16,31 @@ function App() {
     // };
 
     // return <ListGroup items={items} heading="Cities" onSelectItem={handleSelectItem} />;
-
+    let isLoggedIn = localStorage.getItem("isLoggedIn");
+    let isAdmin = localStorage.getItem("isAdmin");
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/"
+                        element={
+                            <Home isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
+                        }
+                    />
                     <Route path="/register" element={<Register />} />
                     <Route path="/scoreboard" element={<Scoreboard />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/challenges" element={<Challenges />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route
+                        path="/challenges"
+                        element={
+                            <Challenges
+                                isLoggedIn={isLoggedIn}
+                                isAdmin={isAdmin}
+                            />
+                        }
+                    />
                 </Routes>
             </BrowserRouter>
         </>
