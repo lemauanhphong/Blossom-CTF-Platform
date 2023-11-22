@@ -26,7 +26,7 @@ export default () => {
     ];
     return (
         <>
-            <NavBar items={navBarItems[true]} selectedIndex={1} />
+            <NavBar items={navBarItems()} selectedIndex={1} />
             <div className="container">
                 <div className="row">
                     <div

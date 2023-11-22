@@ -2,15 +2,14 @@ import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 
 export default () => {
-    let isLoggedIn = false;
     return (
         <div>
-            <NavBar items={navBarItems[isLoggedIn]} selectedIndex={4} />
+            <NavBar items={navBarItems()} selectedIndex={4} />
 
             <div className="container">
                 <div className="row mb-5">
                     <h4 className="text-light text-center fw-bold">
-                        Register for blossomCTF
+                        Log in blossomCTF
                     </h4>
                 </div>
 
