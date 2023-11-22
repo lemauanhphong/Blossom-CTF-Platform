@@ -6,8 +6,8 @@ interface props {
 }
 
 interface itemProps {
-    name: string,
-    route: string
+    name: string;
+    route: string;
 }
 
 export default memo(({ items, selectedIndex }: props) => {
