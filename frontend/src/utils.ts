@@ -1,4 +1,4 @@
-export const navBarItems = (isLoggedIn?: boolean, isAadmin?: boolean) => {
+export const navBarItems = (isLoggedIn?: boolean, isAdmin?: boolean) => {
     if (!isLoggedIn)
         return [
             { name: "🌼Home", route: "/" },
@@ -8,7 +8,7 @@ export const navBarItems = (isLoggedIn?: boolean, isAadmin?: boolean) => {
             { name: "Login", route: "/login" },
         ];
 
-    if (isAadmin)
+    if (isAdmin)
         return [
             { name: "🌼Home", route: "/" },
             { name: "Scoreboard", route: "/scoreboard" },

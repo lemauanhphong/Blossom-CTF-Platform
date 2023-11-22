@@ -7,10 +7,12 @@ export default () => {
             <NavBar items={navBarItems()} selectedIndex={3} />
 
             <div className="container">
-                <div className="row mb-5">
-                    <h4 className="text-light text-center fw-bold">
-                        Register for blossomCTF
-                    </h4>
+                <div className="d-flex justify-content-center">
+                    <div className="row mb-5">
+                        <h4 className="text-light fw-bold">
+                            Register for blossomCTF
+                        </h4>
+                    </div>
                 </div>
 
                 <div className="row justify-content-center">
