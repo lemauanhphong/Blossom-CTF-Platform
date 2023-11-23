@@ -1,6 +1,6 @@
 // import ListGroup from "./components/ListGroup";
 // import Challenges from "./components/Challenges";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Scoreboard from "./pages/Scoreboard";
@@ -30,7 +30,10 @@ function App() {
                     />
                     <Route path="/register" element={<Register />} />
                     <Route path="/scoreboard" element={<Scoreboard />} />
-                    <Route path="/login" element={<Login />} />
+                    <Route
+                        path="/login"
+                        element={isLoggedIn ? <Navigate to="/" /> : <Login />}
+                    />
                     <Route path="/admin" element={<Admin />} />
                     <Route
                         path="/challenges"

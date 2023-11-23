@@ -20,7 +20,7 @@ export default memo(({ items, selectedIndex }: props) => {
             <nav>
                 <ul className="nav justify-content-center fw-bold nav-underline mt-2">
                     {items.map((item, index) => (
-                        <li className="nav-item">
+                        <li key={item.route} className="nav-item">
                             <a
                                 href={item.route}
                                 className={

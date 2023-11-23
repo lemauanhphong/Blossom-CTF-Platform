@@ -14,7 +14,7 @@ app.secret_key = os.urandom(32)
 app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 app.before_request_funcs = {None: [sanitize]}
 
