@@ -14,11 +14,11 @@ MAXIMUM_FILE_SIZE = 50 * 1024 * 1024
 @admin.route("/challs", methods=["GET"])
 @require_admin
 def get_challs():
-    challs = []
+    result = []
     for chall in Challenge.find():
         chall["_id"] = str(chall["_id"])
-        challs.append(chall)
-    return challs
+        result.append(chall)
+    return result
 
 
 @admin.route("/challs", methods=["POST", "PUT"])
