@@ -6,7 +6,7 @@ export const submitFlag = async (name: string, flag: string) => {
     if (resp?.status === 200) {
         await Swal.fire({
             icon: "success",
-            title: "Welcome",
+            title: "Pwned!!!",
             text: resp.data.msg,
             showConfirmButton: false,
             timer: 1500,

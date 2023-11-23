@@ -68,7 +68,6 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
     //         files: [{ fileid: "asdasd", filename: "hehe.zip" }],
     //     },
     // ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
-    
 
     useEffect(() => {
         let fetchChallenges = async () => {
@@ -105,7 +104,10 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
 
     const updateChallengesState = async (e: FormEvent, name: string) => {
         e.preventDefault();
-        const isSuccessFlag = await submitFlag(name, e.target[0].value);
+        const isSuccessFlag = await submitFlag(
+            name,
+            ((e.target as HTMLFormElement)[0] as HTMLInputElement).value
+        );
         if (isSuccessFlag) setRerenderSwitch(rerenderSwitch ^ 1);
     };
 
