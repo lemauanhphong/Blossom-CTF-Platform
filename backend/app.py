@@ -25,4 +25,5 @@ app.register_blueprint(challs)
 app.register_blueprint(profile)
 app.register_blueprint(scores)
 
-app.run("0.0.0.0", debug=True)
+if __name__ == "__main__":
+    app.run("0.0.0.0")
