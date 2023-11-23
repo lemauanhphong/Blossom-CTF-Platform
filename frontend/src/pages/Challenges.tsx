@@ -1,6 +1,5 @@
 import Categories from "../components/Categories";
 import Challenges from "../components/Challenges";
-import Files from "../components/Files";
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 
