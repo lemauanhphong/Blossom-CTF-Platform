@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { getCategoris, getChallenges } from "../api/Challenges";
 import Categories from "../components/Categories";
 import Challenges from "../components/Challenges";
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
+import { submitFlag } from "../api/SubmitFlag";
 
 interface Props {
     isLoggedIn: string | null;
@@ -33,6 +34,9 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
     //         solved: 1,
     //     },
     // ];
+    const [filters, setFilters] = useState(new Set<string>());
+    const [challenges, setChallenges] = useState([]);
+    const [rerenderSwitch, setRerenderSwitch] = useState(0);
     const [categories, setCategories] = useState([]);
     useEffect(() => {
         let fetchCategoris = async () => {
@@ -41,7 +45,7 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
         };
 
         fetchCategoris();
-    }, []);
+    }, [rerenderSwitch]);
     // let categories = async () => getCategoris();
 
     // let challenges = [
@@ -64,9 +68,8 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
     //         files: [{ fileid: "asdasd", filename: "hehe.zip" }],
     //     },
     // ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
-    const [filters, setFilters] = useState(new Set<string>());
-    const [challenges, setChallenges] = useState([]);
-    const [rerenderSwitch, setRerenderSwitch] = useState(0);
+    
+
     useEffect(() => {
         let fetchChallenges = async () => {
             let chall = await getChallenges();
@@ -100,6 +103,12 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
         }
     };
 
+    const updateChallengesState = async (e: FormEvent, name: string) => {
+        e.preventDefault();
+        const isSuccessFlag = await submitFlag(name, e.target[0].value);
+        if (isSuccessFlag) setRerenderSwitch(rerenderSwitch ^ 1);
+    };
+
     return (
         <>
             <NavBar
@@ -117,7 +126,10 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
                     </div>
 
                     <div className="col-7">
-                        <Challenges challenges={challenges} />
+                        <Challenges
+                            handleOnSubmit={updateChallengesState}
+                            challenges={challenges}
+                        />
                     </div>
                 </div>
             </div>

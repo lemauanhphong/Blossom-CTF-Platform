@@ -9,7 +9,7 @@ export default () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const isSuccess = await login(username, password);
-        if (isSuccess) window.location.reload();
+        if (isSuccess) window.location.href = "/";
     };
     return (
         <div>
