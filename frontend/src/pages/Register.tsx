@@ -1,7 +1,16 @@
+import { FormEvent, useState } from "react";
+import { register } from "../api/Register";
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 
 export default () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        const isSuccess = await register(username, password);
+        if (isSuccess) window.location.href = "/login";
+    };
     return (
         <div>
             <NavBar items={navBarItems()} selectedIndex={3} />
@@ -17,7 +26,7 @@ export default () => {
 
                 <div className="row justify-content-center">
                     <div className="col-5">
-                        <form className="form-group">
+                        <form className="form-group" onSubmit={handleSubmit}>
                             <div className="input-group border border-light rounded">
                                 <div
                                     className="input-group-text"
@@ -29,6 +38,9 @@ export default () => {
                                     style={{ backgroundColor: "#222222" }}
                                     className="form-control text-light custom-color-999999-placeholder"
                                     placeholder="Username"
+                                    onChange={(e) =>
+                                        setUsername(e.target.value)
+                                    }
                                 ></input>
                             </div>
 
@@ -44,6 +56,9 @@ export default () => {
                                     style={{ backgroundColor: "#222222" }}
                                     className="form-control text-light custom-color-999999-placeholder"
                                     placeholder="Password"
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 ></input>
                             </div>
 

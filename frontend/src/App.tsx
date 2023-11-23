@@ -30,12 +30,17 @@ function App() {
                             <Home isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
                         }
                     />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/scoreboard" element={<Scoreboard />} />
+                    <Route
+                        path="/register"
+                        element={
+                            isLoggedIn ? <Navigate to="/" /> : <Register />
+                        }
+                    />
                     <Route
                         path="/login"
                         element={isLoggedIn ? <Navigate to="/" /> : <Login />}
                     />
+                    <Route path="/scoreboard" element={<Scoreboard />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route
                         path="/challenges"
