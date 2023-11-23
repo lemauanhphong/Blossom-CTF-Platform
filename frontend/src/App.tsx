@@ -1,6 +1,6 @@
 // import ListGroup from "./components/ListGroup";
 // import Challenges from "./components/Challenges";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Scoreboard from "./pages/Scoreboard";
@@ -17,17 +17,34 @@ function App() {
     // };
 
     // return <ListGroup items={items} heading="Cities" onSelectItem={handleSelectItem} />;
-
+    let isLoggedIn = localStorage.getItem("isLoggedIn");
+    let isAdmin = localStorage.getItem("isAdmin");
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/"
+                        element={
+                            <Home isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
+                        }
+                    />
                     <Route path="/register" element={<Register />} />
                     <Route path="/scoreboard" element={<Scoreboard />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/challenges" element={<Challenges />} />
+                    <Route
+                        path="/login"
+                        element={isLoggedIn ? <Navigate to="/" /> : <Login />}
+                    />
                     <Route path="/admin" element={<Admin />} />
+                    <Route
+                        path="/challenges"
+                        element={
+                            <Challenges
+                                isLoggedIn={isLoggedIn}
+                                isAdmin={isAdmin}
+                            />
+                        }
+                    />
                     <Route path="/profile" element={<Profile />} />
                 </Routes>
             </BrowserRouter>
