@@ -1,4 +1,5 @@
 import random
+from re import subn
 import string
 from base64 import b64encode
 from pprint import pprint
@@ -77,6 +78,11 @@ def categories():
     return r.json()
 
 
+def submit_flag(name, flag):
+    r = s.post(TARGET + "/flag", json={"name": name, "flag": flag})
+    return r.json()
+
+
 s = Session()
 
 
@@ -96,6 +102,7 @@ chall = {
     "score": random.randint(0, 1000),
 }
 
-pprint(add_chall(chall))
+# pprint(add_chall(chall))
 pprint(get_challs())
-pprint(admin_get_challs())
+pprint(submit_flag("WPzKlrDdkX", "flag{OpjAAIJrxq}"))
+pprint(categories())
