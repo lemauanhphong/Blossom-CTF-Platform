@@ -19,6 +19,7 @@ export default () => {
             content: "bypass it",
             score: 100,
             solves: 10,
+            solved: false,
         },
         {
             name: "bigwaf",
@@ -26,6 +27,7 @@ export default () => {
             category: "misc",
             score: 500,
             solves: 1,
+            solved: false,
         },
         {
             name: "bigwaf",
@@ -33,6 +35,7 @@ export default () => {
             category: "misc",
             score: 500,
             solves: 1,
+            solved: true,
         },
         {
             name: "bigwaf",
@@ -40,6 +43,7 @@ export default () => {
             category: "misc",
             score: 500,
             solves: 1,
+            solved: false,
         },
         {
             name: "bigwaf",
@@ -47,9 +51,12 @@ export default () => {
             category: "misc",
             score: 500,
             solves: 1,
+            solved: true,
         },
-    ];
+    ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
 
+    let isLoggedIn = localStorage.getItem("isLoggedIn");
+    // let isAdmin = localStorage.getItem("isAdmin");
     return (
         <>
             <div className="container">
@@ -67,7 +74,10 @@ export default () => {
                                         type="checkbox"
                                     ></input>
                                     <label className="form-check-label">
-                                        {category.name} ({category.solved}/
+                                        {category.name} (
+                                        {isLoggedIn
+                                            ? category.solved + "/"
+                                            : ""}
                                         {category.total})
                                     </label>
                                 </div>
@@ -98,12 +108,28 @@ export default () => {
                                             </div>
                                             <div className="input-group">
                                                 <input
+                                                    {...{
+                                                        disabled:
+                                                            challenge.solved,
+                                                    }}
                                                     className="form-control"
-                                                    placeholder="blossom{.+}"
+                                                    placeholder={
+                                                        challenge.solved
+                                                            ? "🤯Solved! Good job"
+                                                            : "blossom{.+}"
+                                                    }
                                                 ></input>
                                                 <button
+                                                    {...{
+                                                        disabled:
+                                                            challenge.solved,
+                                                    }}
                                                     type="submit"
-                                                    className="btn btn-secondary btn-group"
+                                                    className={
+                                                        challenge.solved
+                                                            ? "btn btn-success btn-group"
+                                                            : "btn btn-secondary btn-group"
+                                                    }
                                                 >
                                                     Submit
                                                 </button>

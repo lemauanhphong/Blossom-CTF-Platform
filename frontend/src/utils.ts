@@ -1,4 +1,9 @@
-export const navBarItems = (isLoggedIn?: boolean, isAdmin?: boolean) => {
+import { backend } from "./config";
+
+export const navBarItems = (
+    isLoggedIn?: string | null,
+    isAdmin?: string | null
+) => {
     if (!isLoggedIn)
         return [
             { name: "🌼Home", route: "/" },
@@ -25,4 +30,38 @@ export const navBarItems = (isLoggedIn?: boolean, isAdmin?: boolean) => {
         { name: "Profile", route: "/profile" },
         { name: "Logout", route: "/logout" },
     ];
+};
+
+type StringStringObject = {
+    [key: string]: string;
+};
+
+export const request = async (
+    method: string,
+    endpoint: string,
+    body?: StringStringObject,
+    headers?: StringStringObject
+) => {
+    if (!headers) headers = {};
+    if (!body) body = {};
+    try {
+        let resp = await fetch(`${backend}${endpoint}`, {
+            method,
+            headers: { "Content-Type": "application/json", ...headers },
+            body: JSON.stringify(body),
+            credentials: "include",
+        });
+
+        let data;
+        try {
+            data = await resp.json();
+        } catch (e) {
+            data = {"msg": "Error occured! Please try again"};
+        }
+        
+        return { status: resp.status, data };
+    } catch (e) {
+        console.log("Error in fetching API ", method, headers, body, e);
+        return { status: 500, data: {"msg": "Error occured! Please try again"} };
+    }
 };
