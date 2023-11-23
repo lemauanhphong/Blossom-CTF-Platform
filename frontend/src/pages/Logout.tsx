@@ -1,3 +1,5 @@
 export default () => {
-    return <div>Logout</div>;
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdmin");
+    return window.location.href = '/login';
 };
