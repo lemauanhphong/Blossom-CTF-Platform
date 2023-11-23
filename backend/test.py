@@ -9,7 +9,7 @@ TARGET = "http://localhost:5000"
 
 
 def randstr():
-    return "".join(random.choices(string.printable, k=10))
+    return "".join(random.choices(string.ascii_letters, k=10))
 
 
 def register(account):
@@ -57,41 +57,45 @@ def delete_chall(name):
     return r.json()
 
 
+def get_current_profile():
+    r = s.get(TARGET + "/profile")
+    return r.json()
+
+
+def get_public_profile(username):
+    r = s.get(TARGET + "/profile", params={"username": username})
+    return r.json()
+
+
+def scores():
+    r = s.get(TARGET + "/scores")
+    return r.json()
+
+
+def categories():
+    r = s.get(TARGET + "/categories")
+    return r.json()
+
+
 s = Session()
 
 
 account = {"username": randstr(), "password": randstr()}
-# account["username"] = account["password"] = "admin"
+account = {"username": "admin", "password": "admin"}
+print(account)
 
 pprint(register(account))
 pprint(login(account))
 
-# new_password = randstr()
-# print(change_password(account["password"], new_password))
-# account["password"] = new_password
-# print(account)
-
-
 chall = {
     "name": randstr(),
-    "category": random.choice(["wed", "pown", "4n6", "cry"]),
+    "category": random.choice(["wed", "pown", "4n6", "cryto"]),
     "content": randstr(),
-    "flag": f"flag{randstr()}",
+    "flag": "flag{%s}" % randstr(),
     "files": {"a.jpg": b64encode(randstr().encode()).decode(), "b.png": b64encode(randstr().encode()).decode()},
     "score": random.randint(0, 1000),
 }
 
-chall["name"] = "miniwaf"
-
 pprint(add_chall(chall))
+pprint(get_challs())
 pprint(admin_get_challs())
-
-
-chall["name"] = "hehe"
-chall["_id"] = "655cd81e17cf01ac90d8d87f"
-
-pprint(update_chall(chall))
-# pprint(admin_get_challs())
-
-pprint(delete_chall("miniwaf"))
-# pprint(admin_get_challs())
