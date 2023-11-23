@@ -19,12 +19,15 @@ def get_challs():
 
 @challs.route("/categories", methods=["GET"])
 def get_categories():
-    categories = {}
+    categories = []
     for c in Challenge.distinct("category"):
-        categories[c] = {
-            "total": Challenge.count_documents({"category": c}),
-            "solved": SolvedLog.count_documents({"category": c}),
-        }
+        categories.append(
+            {
+                "name": c,
+                "total": Challenge.count_documents({"category": c}),
+                "solved": SolvedLog.count_documents({"category": c}),
+            }
+        )
     return categories
 
 
