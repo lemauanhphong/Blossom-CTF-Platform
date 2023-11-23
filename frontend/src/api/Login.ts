@@ -7,12 +7,13 @@ export const login = async (username: string, password: string) => {
         localStorage.setItem("isLoggedIn", "1");
         if (resp.data.role === "admin") localStorage.setItem("isAdmin", "1");
         return true;
-    } else
-        Swal.fire({
+    } else {
+        await Swal.fire({
             icon: "error",
             title: "Oops...",
             text: resp.data.msg,
-            footer: '🌼blossomCTF',
+            footer: "🌼blossomCTF",
         });
         return false;
+    }
 };
