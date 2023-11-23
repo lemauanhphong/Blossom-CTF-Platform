@@ -7,12 +7,10 @@ client = MongoClient("mongo", 27017, username="root", password="123456", serverS
 db = client["blossom"]
 
 User = db["users"]
-Team = db["teams"]
 Challenge = db["challenges"]
 Log = db["logs"]
 
 User.create_index("username", unique=True)
-Team.create_index("name", unique=True)
 Challenge.create_index("name", unique=True)
 
 # TODO: handle admin account
