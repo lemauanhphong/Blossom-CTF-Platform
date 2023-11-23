@@ -41,9 +41,9 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
                         className="col-2 rounded hover-zoom"
                         style={{ backgroundColor: "#222222" }}
                     >
-                        <a href="/register">
+                        <a href={isLoggedIn ? "/challenges" : "/register"}>
                             <h2 className="text-light text-center fw-bold p-3">
-                                Register Now ➡️
+                                {isLoggedIn ? "Challenges ➡️" : "Register Now ➡️"}
                             </h2>
                         </a>
                     </div>
