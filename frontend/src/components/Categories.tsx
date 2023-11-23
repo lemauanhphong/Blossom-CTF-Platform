@@ -1,9 +1,10 @@
 interface Props {
+    filters: string[];
     categories: { name: string; total: number; solved?: number }[];
     isLoggedIn: string | null;
 }
 
-export default ({ categories, isLoggedIn }: Props) => {
+export default ({ filters, categories, isLoggedIn }: Props) => {
     return (
         <div
             className="rounded p-3 text-white"

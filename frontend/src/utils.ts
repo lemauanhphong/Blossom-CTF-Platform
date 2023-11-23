@@ -45,23 +45,35 @@ export const request = async (
     if (!headers) headers = {};
     if (!body) body = {};
     try {
-        let resp = await fetch(`${backend}${endpoint}`, {
-            method,
-            headers: { "Content-Type": "application/json", ...headers },
-            body: JSON.stringify(body),
-            credentials: "include",
-        });
+        let resp;
+        if (method !== "HEAD" && method !== "GET") {
+            resp = await fetch(`${backend}${endpoint}`, {
+                method,
+                headers: { "Content-Type": "application/json", ...headers },
+                body: JSON.stringify(body),
+                credentials: "include",
+            });
+        } else {
+            resp = await fetch(`${backend}${endpoint}`, {
+                method,
+                headers,
+                credentials: "include",
+            });
+        }
 
         let data;
         try {
             data = await resp.json();
         } catch (e) {
-            data = {"msg": "Error occured! Please try again"};
+            data = { msg: "Error occured! Please try again" };
         }
-        
+
         return { status: resp.status, data };
     } catch (e) {
         console.log("Error in fetching API ", method, headers, body, e);
-        return { status: 500, data: {"msg": "Error occured! Please try again"} };
+        return {
+            status: 500,
+            data: { msg: "Error occured! Please try again" },
+        };
     }
 };
