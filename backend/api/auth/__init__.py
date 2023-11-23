@@ -7,7 +7,8 @@ from .helpers import is_strong_password, require_login
 
 auth = Blueprint("auth", __name__)
 
-# TODO: /team/login, /team/join
+
+# TODO: reset password send gmail
 
 
 @auth.route("/register", methods=["POST"])
@@ -24,6 +25,7 @@ def register():
                 "username": username,
                 "password": bcrypt.hashpw(password.encode(), bcrypt.gensalt()),
                 "role": "user",
+                "solved": [],
                 "score": 0,
             }
         )

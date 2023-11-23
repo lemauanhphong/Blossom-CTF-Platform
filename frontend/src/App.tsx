@@ -7,6 +7,7 @@ import Scoreboard from "./pages/Scoreboard";
 import Login from "./pages/Login";
 import Challenges from "./pages/Challenges";
 import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
 import "./App.css";
 function App() {
     // let items = [];
@@ -44,6 +45,7 @@ function App() {
                             />
                         }
                     />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </BrowserRouter>
         </>

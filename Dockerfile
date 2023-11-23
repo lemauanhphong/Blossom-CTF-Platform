@@ -1,10 +1,10 @@
 FROM python:3.11-alpine
 
-WORKDIR /src
+WORKDIR /backend
 
-COPY ./src/requirements.txt .
+COPY ./backend/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./src .
+COPY ./backend .
 
 CMD python app.py

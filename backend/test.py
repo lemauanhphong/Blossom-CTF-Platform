@@ -3,8 +3,7 @@ import string
 from base64 import b64encode
 from pprint import pprint
 
-from requests import Session, delete
-from src.database import Challenge
+from requests import Session
 
 TARGET = "http://localhost:5000"
 
@@ -58,11 +57,6 @@ def delete_chall(name):
     return r.json()
 
 
-def get_users():
-    r = s.get(TARGET + "/users")
-    return r.json()
-
-
 s = Session()
 
 
@@ -71,7 +65,6 @@ account = {"username": randstr(), "password": randstr()}
 
 pprint(register(account))
 pprint(login(account))
-pprint(get_users())
 
 # new_password = randstr()
 # print(change_password(account["password"], new_password))

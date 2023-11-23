@@ -2,7 +2,7 @@ export default () => {
     return (
         <div className="row m-3">
             <div className="col-10 rounded bg-rctf text-light offset-1 p-3">
-                <form>
+                <form className="form-group">
                     <div>
                         <div className="row">
                             <div className="col-6">
@@ -55,11 +55,13 @@ export default () => {
                             />
                         </div>
                     </div>
+                    <div className=" justify-content-between d-flex">
+                        <button className="btn btn-info btn-md">Update</button>
+                        <button className="btn btn-danger btn-md">
+                            Delete
+                        </button>
+                    </div>
                 </form>
-                <div className=" justify-content-between d-flex">
-                    <button className="btn btn-info btn-md">Update</button>
-                    <button className="btn btn-danger btn-md"> Delete</button>
-                </div>
             </div>
         </div>
     );
