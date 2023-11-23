@@ -1,9 +1,12 @@
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 
-export default () => {
-    const isLoggedIn = false;
-    const isAdmin = false;
+interface Props {
+    isLoggedIn: string | null;
+    isAdmin: string | null;
+}
+
+export default ({ isLoggedIn, isAdmin }: Props) => {
     return (
         <>
             <NavBar
@@ -77,7 +80,7 @@ export default () => {
                                     >
                                         <img
                                             className="rounded img-fluid p-3"
-                                            src="public/bunbo.jpg"
+                                            src="bunbo.jpg"
                                         ></img>
                                     </div>
 
@@ -103,7 +106,7 @@ export default () => {
                                     >
                                         <img
                                             className="rounded img-fluid p-3"
-                                            src="public/boba.jpeg"
+                                            src="boba.jpeg"
                                         ></img>
                                     </div>
 
