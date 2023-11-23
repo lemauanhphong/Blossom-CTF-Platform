@@ -72,7 +72,7 @@ export const request = async (
     } catch (e) {
         console.log("Error in fetching API ", method, headers, body, e);
         return {
-            status: 500,
+            status: 2808,
             data: { msg: "Error occured! Please try again" },
         };
     }
