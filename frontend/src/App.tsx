@@ -9,6 +9,7 @@ import Challenges from "./pages/Challenges";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import "./App.css";
+import Logout from "./pages/Logout";
 function App() {
     // let items = [];
 
@@ -46,6 +47,7 @@ function App() {
                         }
                     />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/logout" element={<Logout />} />
                 </Routes>
             </BrowserRouter>
         </>

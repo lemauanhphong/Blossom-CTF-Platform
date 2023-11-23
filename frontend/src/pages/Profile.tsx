@@ -3,8 +3,8 @@ import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 
 export default () => {
-    const isLoggedIn = true;
-    const isAdmin = false;
+    const isLoggedIn = "true";
+    const isAdmin = null;
     return (
         <>
             <NavBar
