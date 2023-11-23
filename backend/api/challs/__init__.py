@@ -20,14 +20,14 @@ def get_challs():
 @challs.route("/categories", methods=["GET"])
 def get_categories():
     categories = []
-    for c in Challenge.distinct("category"):
-        categories.append(
-            {
-                "name": c,
-                "total": Challenge.count_documents({"category": c}),
-                "solved": SolvedLog.count_documents({"category": c}),
-            }
-        )
+    for name in Challenge.distinct("category"):
+        category = {"name": name, "total": Challenge.count_documents({"category": name})}
+
+        if "username" in session:
+            category["solved"] = SolvedLog.count_documents({"username": session["username"], "category": name})
+
+        categories.append(category)
+
     return categories
 
 
