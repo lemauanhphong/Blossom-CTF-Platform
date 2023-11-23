@@ -12,6 +12,8 @@ export const login = async (username: string, password: string) => {
             icon: "error",
             title: "Oops...",
             text: resp.data.msg,
+            showConfirmButton: false,
+            timer: 1500,
             footer: "🌼blossomCTF",
         });
         return false;
