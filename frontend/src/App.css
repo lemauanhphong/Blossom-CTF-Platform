@@ -1,14 +1,14 @@
-.bg-rctf{
+.bg-rctf {
     background-color: var(--rctf-bg) !important;
 }
 .content {
     max-width: 60em;
     margin: 0 auto 1.5em;
     width: 80%;
-  }
-  .card p {
+}
+.card p {
     margin: 1rem 0;
-  }
-  span{
+}
+card.span {
     margin-right: 1.5rem;
-  }
+}
