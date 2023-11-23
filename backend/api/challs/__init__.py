@@ -8,8 +8,13 @@ challs = Blueprint("challs", __name__)
 
 
 @challs.route("/challs", methods=["GET"])
+@require_login
 def get_challs():
-    return list(Challenge.find({}, {"_id": 0, "flag": 0}))
+    res = []
+    for chall in Challenge.find({}, {"_id": 0, "flag": 0}):
+        chall["solved"] = User.find_one({"name": session["username", "solved" : chall["name"]]}) != []
+        res.append(chall)
+    return res
 
 
 @challs.route("/flag", methods=["POST"])
@@ -18,29 +23,26 @@ def submit_flag():
     name = request.get_json().get("name")
     flag = request.get_json().get("flag")
 
-    return {"msg": ""}
+    if User.find_one({"username": session["username"], "solved": name}):
+        return {"msg": "Already solved"}, 409
 
-    # TODO: redesign db
+    if chall := Challenge.find_one({"name": name}):
+        if flag == chall["flag"]:
+            User.update_one({"name": session["username"]}, {"$push": {"solved": name}})
+            status = "Accepted"
+        else:
+            status = "Wrong"
 
-    # if chall := Challenge.find_one({"name": name, "flag": flag}):
-    #     if Log.find_one({"username": session['username'], 'challenge': name, 'status': 'accepted'}):
-    #         Log.insert_one(
-    #                 {"username": session["username"], "challenge": name, 'flag': flag, "status": "duplicated", "time": datetime.now()}
-    #         )
-    #     else:
-    #         Challenge.update_one({'_id': chall['_id']})
-    #
-    #
-    #
-    #
-    #     , {"$inc": {"solves": 1}}):
-    #     # TODO: update score based on formular
-    #     # TODO: update team score
-    #     User.update_one({"username": name}, {"$inc": {"score": chall["score"]}})
-    #     Log.insert_one(
-    #             {"username": session["username"], "challenge": name, 'flag': flag, "status": "accepted", "time": datetime.now()}
-    #     )
-    # else:
-    #     Log.insert_one(
-    #             {"username": session["username"], "challenge": name, 'flag': flag, "status": "wrong", "time": datetime.now()}
-    #     )
+        Log.insert_one(
+            {
+                "username": session["username"],
+                "challenge": name,
+                "flag": flag,
+                "status": status,
+                "time": datetime.now(),
+            }
+        )
+        return {"msg": status}, 200 if status == "Accepted" else 422
+
+    else:
+        return {"msg": "Challenge not found"}
