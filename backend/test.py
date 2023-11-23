@@ -77,6 +77,16 @@ def categories():
     return r.json()
 
 
+def submit_flag(name, flag):
+    r = s.post(TARGET + "/flag", json={"name": name, "flag": flag})
+    return r.json()
+
+
+def get_file(fileid):
+    r = s.get(TARGET + "/files", params={"fileid": fileid})
+    return r.text
+
+
 s = Session()
 
 
@@ -86,16 +96,20 @@ print(account)
 
 pprint(register(account))
 pprint(login(account))
+print(s.cookies)
 
 chall = {
     "name": randstr(),
     "category": random.choice(["wed", "pown", "4n6", "cryto"]),
     "content": randstr(),
     "flag": "flag{%s}" % randstr(),
-    "files": {"a.jpg": b64encode(randstr().encode()).decode(), "b.png": b64encode(randstr().encode()).decode()},
+    "files": {
+        "a.txt": b64encode(randstr().encode()).decode(),
+        "b.txt": b64encode(randstr().encode()).decode(),
+    },
     "score": random.randint(0, 1000),
 }
 
 pprint(add_chall(chall))
 pprint(get_challs())
-pprint(admin_get_challs())
+pprint(categories())
