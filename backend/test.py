@@ -63,13 +63,12 @@ def get_current_profile():
 
 
 def get_public_profile(username):
-    r = s.post(TARGET + "/profile", json={"username": username})
+    r = s.get(TARGET + "/profile", params={"username": username})
     return r.json()
 
 
 def scores():
     r = s.get(TARGET + "/scores")
-    return r.text
     return r.json()
 
 
@@ -86,7 +85,7 @@ account = {"username": "admin", "password": "admin"}
 print(account)
 
 pprint(register(account))
-pprint(login(account))
+# pprint(login(account))
 
 chall = {
     "name": randstr(),
