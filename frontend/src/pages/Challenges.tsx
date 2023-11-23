@@ -66,6 +66,7 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
     // ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
     const [filters, setFilters] = useState(new Set<string>());
     const [challenges, setChallenges] = useState([]);
+    const [rerenderSwitch, setRerenderSwitch] = useState(0);
     useEffect(() => {
         let fetchChallenges = async () => {
             let chall = await getChallenges();
@@ -82,19 +83,20 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
         };
 
         fetchChallenges();
-    }, [filters]);
+    }, [rerenderSwitch]);
 
     const updateFilters = (checked: boolean, categoryFilter: string) => {
         if (checked) {
             setFilters((prev) => {
-                return new Set(prev).add(categoryFilter);
+                return prev.add(categoryFilter);
             });
+            setRerenderSwitch(rerenderSwitch ^ 1);
         } else {
             setFilters((prev) => {
-                let newSet = new Set(prev);
-                newSet.delete(categoryFilter);
-                return newSet;
+                prev.delete(categoryFilter);
+                return prev;
             });
+            setRerenderSwitch(rerenderSwitch ^ 1);
         }
     };
 
