@@ -11,7 +11,7 @@ challs = Blueprint("challs", __name__)
 @require_login
 def get_challs():
     res = []
-    for chall in Challenge.find({}, {"_id": 0, "flag": 0}):
+    for chall in Challenge.find({}, {"_id": 0, "flag": 0, "files.data": 0}):
         chall["solved"] = SolvedLog.find_one({"name": session["username"], "challenge": chall["name"]}) != []
         res.append(chall)
     return res

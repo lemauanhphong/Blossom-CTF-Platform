@@ -63,13 +63,12 @@ def get_current_profile():
 
 
 def get_public_profile(username):
-    r = s.post(TARGET + "/profile", json={"username": username})
+    r = s.get(TARGET + "/profile", params={"username": username})
     return r.json()
 
 
 def scores():
     r = s.get(TARGET + "/scores")
-    return r.text
     return r.json()
 
 
@@ -90,16 +89,13 @@ pprint(login(account))
 
 chall = {
     "name": randstr(),
-    "category": random.choice(["wed", "pown", "4n6", "cry"]),
+    "category": random.choice(["wed", "pown", "4n6", "cryto"]),
     "content": randstr(),
-    "flag": f"flag{randstr()}",
+    "flag": "flag{%s}" % randstr(),
     "files": {"a.jpg": b64encode(randstr().encode()).decode(), "b.png": b64encode(randstr().encode()).decode()},
     "score": random.randint(0, 1000),
 }
 
 pprint(add_chall(chall))
-# pprint(admin_get_challs())
-
-pprint(categories())
-pprint(get_current_profile())
-pprint(get_public_profile("admin"))
+pprint(get_challs())
+pprint(admin_get_challs())
