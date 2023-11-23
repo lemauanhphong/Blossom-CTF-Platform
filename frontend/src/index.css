@@ -1,9 +1,15 @@
 body {
     background-color: #111111;
 }
+:root {
+    --rctf-bg: #222;
+}
 .table-dark {
-    --bs-table-bg: #222 !important;
+    --bs-table-bg: var(--rctf-bg) !important;
     font-weight: 600;
+}
+.card {
+    --bs-card-bg: var(--rctf-bg) !important; 
 }
 a {
     text-decoration: none;
@@ -20,4 +26,20 @@ a:hover {
 .hover-zoom:hover {
     transition: transform 0.2s;
     transform: scale(1.5);
+}
+h5 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.card .action-bar {
+    user-select: none;
+    padding: .5rem;
+    border-top: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    transition: left .2s cubic-bezier(.075,.82,.165,1);
+
+  }
+
+.card {
+    margin-bottom: 20px;
 }
