@@ -1,3 +1,6 @@
+from base64 import b64decode
+from uuid import uuid4
+
 import bson
 from bson.errors import InvalidId
 from database import Challenge
@@ -15,7 +18,7 @@ MAXIMUM_FILE_SIZE = 50 * 1024 * 1024
 @require_admin
 def get_challs():
     result = []
-    for chall in Challenge.find():
+    for chall in Challenge.find({}, {"files.data": 0}):
         chall["_id"] = str(chall["_id"])
         result.append(chall)
     return result
@@ -30,14 +33,13 @@ def add_update_chall():
         if not data.get(field):
             return {"msg": f"Missing {field}"}, 400
 
-    # TODO: handle file update
-
-    # try:
-    #     files = data.get("files", {})
-    #     for k, v in files.items():
-    #         files[k] = b64decode(v)
-    # except:
-    #     return {"msg": "Unable to decode file data"}, 400
+    try:
+        files = []
+        for filename, filedata in data.get("files", {}).items():
+            f = {"fileid": uuid4().hex, "filename": filename, "data": b64decode(filedata)}
+            files.append(f)
+    except:
+        return {"msg": "Unable to decode file data"}, 400
 
     # add chall
     if request.method == "POST":
@@ -48,7 +50,7 @@ def add_update_chall():
                     "category": data["category"],
                     "content": data.get("content"),
                     "flag": data["flag"],
-                    "files": data.get("files"),
+                    "files": files,
                     "score": data["score"],
                     "solves": 0,
                 }
@@ -58,6 +60,7 @@ def add_update_chall():
 
         return {"msg": "Challenge added"}
 
+    # TODO: handle file update
     # update chall
     else:
         if not data.get("_id"):
@@ -72,7 +75,7 @@ def add_update_chall():
                         "category": data["category"],
                         "content": data.get("content"),
                         "flag": data["flag"],
-                        "files": data.get("files"),
+                        "files": files,
                         "score": data["score"],
                     }
                 },
