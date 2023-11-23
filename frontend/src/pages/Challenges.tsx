@@ -44,39 +44,59 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
     }, []);
     // let categories = async () => getCategoris();
 
-    let challenges = [
-        {
-            name: "miniwaf1",
-            category: "web",
-            content: "bypass it",
-            score: 100,
-            solves: 10,
-            solved: false,
-            files: [{ fileid: "asd", filename: "hehe.zip" }],
-        },
-        {
-            name: "bigwaf5",
-            content: "bypass them",
-            category: "misc",
-            score: 500,
-            solves: 1,
-            solved: true,
-            files: [{ fileid: "asdasd", filename: "hehe.zip" }],
-        },
-    ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
-    let filters: string[] = [];
-    // const [challenges, setChallenges] = useState([]);
-    // useEffect(() => {
-    //     let fetchChallenges = async () => {
-    //         let chall = await getChallenges();
-    //         chall.sort((a: Challenge, b: Challenge) =>
-    //             a.solved === b.solved ? 0 : a.solved ? 1 : -1
-    //         );
-    //         setChallenges(chall);
-    //     };
+    // let challenges = [
+    //     {
+    //         name: "miniwaf1",
+    //         category: "web",
+    //         content: "bypass it",
+    //         score: 100,
+    //         solves: 10,
+    //         solved: false,
+    //         files: [{ fileid: "asd", filename: "hehe.zip" }],
+    //     },
+    //     {
+    //         name: "bigwaf5",
+    //         content: "bypass them",
+    //         category: "misc",
+    //         score: 500,
+    //         solves: 1,
+    //         solved: true,
+    //         files: [{ fileid: "asdasd", filename: "hehe.zip" }],
+    //     },
+    // ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
+    const [filters, setFilters] = useState(new Set<string>());
+    const [challenges, setChallenges] = useState([]);
+    useEffect(() => {
+        let fetchChallenges = async () => {
+            let chall = await getChallenges();
+            chall.sort((a: Challenge, b: Challenge) =>
+                a.solved === b.solved ? 0 : a.solved ? 1 : -1
+            );
 
-    //     fetchChallenges();
-    // }, []);
+            chall =
+                filters.size === 0
+                    ? chall
+                    : chall.filter((c: Challenge) => filters.has(c.category));
+
+            setChallenges(chall);
+        };
+
+        fetchChallenges();
+    }, [filters]);
+
+    const updateFilters = (checked: boolean, categoryFilter: string) => {
+        if (checked) {
+            setFilters((prev) => {
+                return new Set(prev).add(categoryFilter);
+            });
+        } else {
+            setFilters((prev) => {
+                let newSet = new Set(prev);
+                newSet.delete(categoryFilter);
+                return newSet;
+            });
+        }
+    };
 
     return (
         <>
@@ -88,7 +108,7 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
                 <div className="row">
                     <div className="offset-1 col-3">
                         <Categories
-                            filters={filters}
+                            handleOnChange={updateFilters}
                             categories={categories}
                             isLoggedIn={isLoggedIn}
                         />

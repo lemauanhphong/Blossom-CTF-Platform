@@ -1,10 +1,10 @@
 interface Props {
-    filters: string[];
+    handleOnChange: any;
     categories: { name: string; total: number; solved?: number }[];
     isLoggedIn: string | null;
 }
 
-export default ({ filters, categories, isLoggedIn }: Props) => {
+export default ({ handleOnChange, categories, isLoggedIn }: Props) => {
     return (
         <div
             className="rounded p-3 text-white"
@@ -17,6 +17,9 @@ export default ({ filters, categories, isLoggedIn }: Props) => {
                         <input
                             className="form-check-input"
                             type="checkbox"
+                            onChange={(e) =>
+                                handleOnChange(e.target.checked, category.name)
+                            }
                         ></input>
                         <label className="form-check-label">
                             {category.name} (
