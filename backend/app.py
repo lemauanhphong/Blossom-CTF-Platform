@@ -3,6 +3,7 @@ import os
 from api.admin import admin
 from api.auth import auth
 from api.challs import challs
+from api.files import files
 from api.profile import profile
 from api.scores import scores
 from flask import Flask
@@ -24,6 +25,8 @@ app.register_blueprint(auth)
 app.register_blueprint(challs)
 app.register_blueprint(profile)
 app.register_blueprint(scores)
+app.register_blueprint(files)
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0")
