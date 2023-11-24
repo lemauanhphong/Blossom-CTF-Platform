@@ -11,6 +11,7 @@ TARGET = "http://localhost:5000"
 def randstr():
     return "".join(random.choices(string.ascii_letters, k=10))
 
+
 class Api:
     def __init__(self, username="", password=""):
         self.s = Session()
@@ -129,7 +130,6 @@ def populate_scoreboard():
 
 if __name__ == "__main__":
     # populate_scoreboard()
-    admin = Api("admin", "admin")
-    admin.login()
-    pprint(admin.get_challs())
-    pprint(admin.get_solves("AJyvdZifPo"))
+    user = Api("user", "user")
+    user.login()
+    pprint(user.get_current_profile())
