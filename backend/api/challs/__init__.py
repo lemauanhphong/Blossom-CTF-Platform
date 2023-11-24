@@ -22,6 +22,7 @@ def get_challs():
 
 
 @challs.route("/categories", methods=["GET"])
+@require_login
 def get_categories():
     categories = []
     for name in Challenge.distinct("category"):
