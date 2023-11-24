@@ -3,6 +3,7 @@ import { navBarItems } from "../utils";
 import { useEffect, useState } from "react";
 import { getScoreboard } from "../api/Score";
 interface Score {
+    _id: string;
     score: number;
     username: string;
 }
@@ -39,7 +40,9 @@ export default () => {
                                             {index + 1}
                                         </td>
                                         <td className="text-start">
-                                            <a href="#">{entry.username}</a>
+                                            <a href={"/profile/" + entry._id}>
+                                                {entry.username}
+                                            </a>
                                         </td>
                                         <td className="text-center">
                                             {entry.score}
