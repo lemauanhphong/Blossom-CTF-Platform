@@ -16,6 +16,7 @@ def get_challs():
     res = []
     for chall in Challenge.find({}, {"flag": 0, "files.data": 0}):
         chall["solved"] = bool(SolvedLog.find_one({"username": session["username"], "challenge": chall["name"]}))
+        chall["solves"] = SolvedLog.count_documents({"challenge": chall["name"]})
         res.append(chall)
     return res
 
