@@ -5,6 +5,7 @@ import Challenges from "../components/Challenges";
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
 import { submitFlag } from "../api/SubmitFlag";
+import { loginRequired } from "../api/LoginRequired";
 
 interface Props {
     isLoggedIn: string | null;
@@ -22,18 +23,13 @@ interface Challenge {
 }
 
 export default ({ isLoggedIn, isAdmin }: Props) => {
-    // let categories = [
-    //     {
-    //         name: "Web",
-    //         total: 12,
-    //         solved: 10,
-    //     },
-    //     {
-    //         name: "Pwn",
-    //         total: 15,
-    //         solved: 1,
-    //     },
-    // ];
+    // Run in mounting phase
+    // -> run before updating phase
+    // -> can check login before updating phase run
+    useEffect(() => {
+        (async () => await loginRequired())();
+    }, []);
+
     const [filters, setFilters] = useState(new Set<string>());
     const [challenges, setChallenges] = useState([]);
     const [rerenderSwitch, setRerenderSwitch] = useState(0);
@@ -46,28 +42,6 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
 
         fetchCategoris();
     }, [rerenderSwitch]);
-    // let categories = async () => getCategoris();
-
-    // let challenges = [
-    //     {
-    //         name: "miniwaf1",
-    //         category: "web",
-    //         content: "bypass it",
-    //         score: 100,
-    //         solves: 10,
-    //         solved: false,
-    //         files: [{ fileid: "asd", filename: "hehe.zip" }],
-    //     },
-    //     {
-    //         name: "bigwaf5",
-    //         content: "bypass them",
-    //         category: "misc",
-    //         score: 500,
-    //         solves: 1,
-    //         solved: true,
-    //         files: [{ fileid: "asdasd", filename: "hehe.zip" }],
-    //     },
-    // ].sort((a, b) => (a.solved === b.solved ? 0 : a.solved ? 1 : -1));
 
     useEffect(() => {
         let fetchChallenges = async () => {
