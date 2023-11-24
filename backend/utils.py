@@ -56,8 +56,6 @@ def require_contest_running(func):
                 return {"msg": "Contest has not started yet"}
             if datetime.fromisoformat(END_TIME).replace(tzinfo=ZoneInfo(TIMEZONE)).timestamp() < now:
                 return {"msg": "Contest has ended"}
-            print(datetime.fromisoformat(START_TIME).replace(tzinfo=ZoneInfo(TIMEZONE)).timestamp(), now)
-            print(datetime.fromisoformat(END_TIME).replace(tzinfo=ZoneInfo(TIMEZONE)).timestamp(), now)
         except ValueError:
             return {"msg": "Invalid contest time"}, 500
 

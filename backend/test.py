@@ -13,8 +13,11 @@ def randstr():
 
 
 class Api:
-    def __init__(self, username=randstr(), password=randstr()) -> None:
+    def __init__(self, username="", password=""):
         self.s = Session()
+        if not username and not password:
+            username = randstr()
+            password = randstr()
         self.account = {"username": username, "password": password}
 
     def register(self):
@@ -89,8 +92,8 @@ def generate_new_challs():
         "content": randstr(),
         "flag": "flag{%s}" % randstr(),
         "files": {
-            "a.txt": b64encode(randstr().encode()).decode(),
-            "b.txt": b64encode(randstr().encode()).decode(),
+            "a.data": b64encode(randstr().encode()).decode(),
+            "b.mkv": b64encode(randstr().encode()).decode(),
         },
         "score": random.randint(0, 1000),
     }
@@ -100,26 +103,28 @@ def populate_scoreboard():
     admin = Api("admin", "admin")
     admin.login()
 
+    user = Api("user", "user")
+    user.login()
+
     flags = []
 
-    for _ in range(5):
+    for _ in range(10):
         new_chall = generate_new_challs()
         pprint(admin.add_chall(new_chall))
         flags.append((new_chall["name"], new_chall["flag"]))
 
-    for _ in range(5):
-        user = Api()
-        user.register()
-        user.login()
+    for _ in range(10):
+        rand_user = Api()
+        rand_user.register()
+        rand_user.login()
         for name, flag in random.choices(flags, k=random.randint(0, len(flags))):
             pprint(user.submit_flag(name, flag))
+            pprint(rand_user.submit_flag(name, flag))
 
     pprint(admin.get_challs())
 
 
 if __name__ == "__main__":
-    populate_scoreboard()
-
     admin = Api("admin", "admin")
     admin.login()
-    pprint(admin.get_current_profile())
+    pprint(admin.scores())
