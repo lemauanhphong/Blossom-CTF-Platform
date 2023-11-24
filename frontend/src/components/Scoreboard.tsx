@@ -1,29 +1,21 @@
 import NavBar from "./NavBar";
 import { navBarItems } from "../utils";
-
+import { useEffect, useState } from "react";
+import { getScoreboard } from "../api/Score";
+interface Score {
+    _id: string;
+    score: number;
+    username: string;
+}
 export default () => {
-    let teams = [
-        {
-            name: "O.W.C.A",
-            points: 1337,
-        },
-        {
-            name: "O.W.C.A",
-            points: 1337,
-        },
-        {
-            name: "O.W.C.A",
-            points: 1337,
-        },
-        {
-            name: "O.W.C.A",
-            points: 1337,
-        },
-        {
-            name: "O.W.C.A",
-            points: 1337,
-        },
-    ];
+    const [scores, setScores] = useState<Score[]>([]);
+    useEffect(() => {
+        (async () => {
+            const response = await getScoreboard();
+            setScores(response.data as Score[]); // Use type assertion to let TypeScript know the data type
+        })();
+    }, []);
+
     return (
         <>
             <NavBar items={navBarItems()} selectedIndex={1} />
@@ -42,16 +34,18 @@ export default () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {teams.map((team, index) => (
-                                    <tr>
+                                {scores.map((entry, index) => (
+                                    <tr key={index}>
                                         <td className="text-center">
                                             {index + 1}
                                         </td>
                                         <td className="text-start">
-                                            <a href="#">{team.name}</a>
+                                            <a href={"/profile/" + entry._id}>
+                                                {entry.username}
+                                            </a>
                                         </td>
                                         <td className="text-center">
-                                            {team.points}
+                                            {entry.score}
                                         </td>
                                     </tr>
                                 ))}
