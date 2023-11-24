@@ -23,6 +23,9 @@ interface Challenge {
 }
 
 export default ({ isLoggedIn, isAdmin }: Props) => {
+    // Run in mounting phase
+    // -> run before updating phase
+    // -> can check login before updating phase run
     useEffect(() => {
         (async () => await loginRequired())();
     }, []);
