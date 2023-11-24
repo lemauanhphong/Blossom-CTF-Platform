@@ -22,7 +22,7 @@ def get_challs():
     return list(Challenge.find({}, {"files.data": 0}))
 
 
-@admin.route("/challs", methods=["POST", "PUT"])
+@admin.route("/challs", methods=["POST", "PATCH"])
 @require_admin
 def add_update_chall():
     data = request.get_json()
