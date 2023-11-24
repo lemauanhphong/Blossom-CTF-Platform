@@ -7,8 +7,6 @@ from utils import require_contest_running
 
 files = Blueprint("files", __name__)
 
-# TODO: check time before granting access
-
 
 @files.route("/files", methods=["GET"])
 @require_login
