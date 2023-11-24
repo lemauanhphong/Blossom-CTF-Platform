@@ -1,6 +1,7 @@
 import Files from "./Files";
 
 interface Props {
+    handleOnSubmit: any;
     challenges: {
         name: string;
         category: string;
@@ -12,7 +13,7 @@ interface Props {
     }[];
 }
 
-export default ({ challenges }: Props) => {
+export default ({ handleOnSubmit, challenges }: Props) => {
     return (
         <>
             {challenges.map((challenge) => (
@@ -35,8 +36,8 @@ export default ({ challenges }: Props) => {
                         </div>
                     </div>
                     <div className="row">
-                        <form>
-                            <div className="form-group">
+                        <form onSubmit={(e) => handleOnSubmit(e, challenge.name)}>
+                            <div className="form-handleOnSubmit">
                                 <hr />
                                 <div className="mb-3">{challenge.content}</div>
 
