@@ -21,6 +21,13 @@ def get_challs():
     return res
 
 
+@challs.route("/solves/<name>", methods=["GET"])
+@require_login
+@require_contest_running
+def get_solves(name=None):
+    return list(SolvedLog.find({"challenge": name}, {"_id": 0, "username": 1, "time": 1}))
+
+
 @challs.route("/categories", methods=["GET"])
 @require_login
 def get_categories():

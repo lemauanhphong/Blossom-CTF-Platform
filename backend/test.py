@@ -72,6 +72,10 @@ class Api:
         r = self.s.get(TARGET + "/scores")
         return r.json()
 
+    def get_solves(self, challname):
+        r = self.s.get(TARGET + "/solves/" + challname)
+        return r.json()
+
     def categories(self):
         r = self.s.get(TARGET + "/categories")
         return r.json()
@@ -108,12 +112,12 @@ def populate_scoreboard():
 
     flags = []
 
-    for _ in range(10):
+    for _ in range(5):
         new_chall = generate_new_challs()
         pprint(admin.add_chall(new_chall))
         flags.append((new_chall["name"], new_chall["flag"]))
 
-    for _ in range(10):
+    for _ in range(5):
         rand_user = Api()
         rand_user.register()
         rand_user.login()
@@ -125,6 +129,8 @@ def populate_scoreboard():
 
 
 if __name__ == "__main__":
+    # populate_scoreboard()
     admin = Api("admin", "admin")
     admin.login()
-    pprint(admin.scores())
+    pprint(admin.get_challs())
+    pprint(admin.get_solves("AJyvdZifPo"))
