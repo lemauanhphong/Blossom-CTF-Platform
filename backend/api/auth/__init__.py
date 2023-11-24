@@ -25,7 +25,7 @@ def register():
                 "username": username,
                 "password": bcrypt.hashpw(password.encode(), bcrypt.gensalt()),
                 "role": "user",
-                "solved": [],
+                "solves": 0,
                 "score": 0,
             }
         )

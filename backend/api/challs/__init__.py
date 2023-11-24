@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from api.auth.helpers import require_login
-from database import Challenge, CommonLog, SolvedLog
+from database import Challenge, CommonLog, SolvedLog, User
 from flask import Blueprint, request, session
 from utils import require_contest_running, response_id_to_hex
 
@@ -63,6 +63,7 @@ def submit_flag():
                     "time": datetime.now(),
                 }
             )
+            User.update_one({"_id": session["_id"]}, {"$inc": {"solves": 1, "score": chall["score"]}})
             return {"msg": "Accepted"}
 
         CommonLog.insert_one(
