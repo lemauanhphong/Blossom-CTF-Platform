@@ -42,6 +42,7 @@ def login():
 
     if user := User.find_one({"username": username}):
         if bcrypt.checkpw(password.encode(), user["password"]):
+            session["_id"] = user["_id"]
             session["username"] = username
             session["role"] = user["role"]
             return {"msg": "Logged in", "role": user["role"]}
@@ -64,11 +65,11 @@ def change_password():
     if not is_strong_password(new_password):
         return {"msg": "Password complexity requirements not met"}, 422
 
-    if not bcrypt.checkpw(password.encode(), User.find_one({"username": session["username"]})["password"]):
+    if not bcrypt.checkpw(password.encode(), User.find_one({"_id": session["_id"]})["password"]):
         return {"msg": "Wrong password"}, 403
 
     User.update_one(
-        {"username": session["username"]},
+        {"_id": session["_id"]},
         {"$set": {"password": bcrypt.hashpw(new_password.encode(), bcrypt.gensalt())}},
     )
 

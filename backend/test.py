@@ -59,6 +59,7 @@ def delete_chall(name):
 
 def get_current_profile():
     r = s.get(TARGET + "/profile")
+    return r.text
     return r.json()
 
 
@@ -110,10 +111,5 @@ chall = {
     "score": random.randint(0, 1000),
 }
 
-pprint(add_chall(chall))
-pprint(get_challs())
-pprint(categories())
-
-pprint(submit_flag(chall["name"], chall["flag"]))
-pprint(get_challs())
-pprint(categories())
+qpprint(get_current_profile())
+pprint(get_public_profile('655f61cd2b9f5c9c50c1964f'))

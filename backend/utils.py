@@ -28,6 +28,24 @@ def sanitize():
             return {"msg": f"{key} must be str"}
 
 
+def response_id_to_hex(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+
+        if isinstance(result, list):
+            for i, obj in enumerate(result):
+                if "_id" in obj:
+                    result[i]["_id"] = str(obj["_id"])
+        else:
+            if "_id" in result:
+                result["_id"] = str(result["_id"])
+
+        return result
+
+    return wrapper
+
+
 def require_contest_running(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
