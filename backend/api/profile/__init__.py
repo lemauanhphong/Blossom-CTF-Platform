@@ -1,5 +1,7 @@
+import bson
 from database import User
-from flask import Blueprint, request, session
+from flask import Blueprint, session
+from utils import response_id_to_hex
 
 profile = Blueprint("profile", __name__, url_prefix="/profile")
 
@@ -7,15 +9,16 @@ profile = Blueprint("profile", __name__, url_prefix="/profile")
 
 
 @profile.route("/", methods=["GET"])
-def get_profile():
-    username = request.args.get("username")
-    if not username:
-        if "username" not in session:
+@profile.route("/<_id>", methods=["GET"])
+@response_id_to_hex
+def get_profile(_id=None):
+    if not _id:
+        if "_id" not in session:
             return {"msg": "Please login first"}, 401
 
-        username = session["username"]
+        _id = session["_id"]
 
-    if user := User.find_one({"username": username}, {"_id": 0, "password": 0, "role": 0}):
+    if user := User.find_one({"_id": bson.ObjectId(_id)}, {"password": 0, "role": 0}):
         return user
 
     return {"msg": "User not found"}, 404

@@ -62,8 +62,8 @@ def get_current_profile():
     return r.json()
 
 
-def get_public_profile(username):
-    r = s.get(TARGET + "/profile", params={"username": username})
+def get_public_profile(_id):
+    r = s.get(TARGET + "/profile/" + _id)
     return r.json()
 
 
@@ -110,10 +110,12 @@ chall = {
     "score": random.randint(0, 1000),
 }
 
-pprint(add_chall(chall))
+pprint(get_current_profile())
+pprint(get_public_profile("655f61cd2b9f5c9c50c1964f"))
 pprint(get_challs())
 pprint(categories())
 
 # pprint(submit_flag(chall["name"], chall["flag"]))
 pprint(get_challs())
 pprint(categories())
+
