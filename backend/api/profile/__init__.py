@@ -6,8 +6,6 @@ from utils import response_id_to_hex
 
 profile = Blueprint("profile", __name__, url_prefix="/profile")
 
-# TODO: return rank
-
 
 @profile.route("/", methods=["GET"])
 @profile.route("/<uid>", methods=["GET"])

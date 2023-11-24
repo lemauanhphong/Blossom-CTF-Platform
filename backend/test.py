@@ -114,14 +114,12 @@ def populate_scoreboard():
         pprint(admin.add_chall(generate_new_challs()))
 
     challs = admin.admin_get_challs()
-    print(challs)
 
     for _ in range(5):
         rand_user = Api()
         rand_user.register()
         rand_user.login()
         for x in random.choices(challs, k=random.randint(0, len(challs))):
-            print(x["_id"], x["flag"])
             pprint(user.submit_flag(x["_id"], x["flag"]))
             pprint(rand_user.submit_flag(x["_id"], x["flag"]))
 
@@ -129,8 +127,7 @@ def populate_scoreboard():
 
 
 if __name__ == "__main__":
-    # populate_scoreboard()
+    populate_scoreboard()
     user = Api("user", "user")
     user.login()
-    pprint(user.get_current_profile())
-    pprint(user.get_public_profile('6560ceab10c3d6a671d51b73'))
+    pprint(user.scores())

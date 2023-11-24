@@ -53,6 +53,7 @@ def get_categories():
     return categories
 
 
+# maintain total time for ranking
 @challs.route("/flag", methods=["POST"])
 @require_login
 @require_contest_running
@@ -88,6 +89,15 @@ def submit_flag():
                 }
             )
             User.update_one({"_id": session["uid"]}, {"$inc": {"solves": 1, "score": chall["score"]}})
+
+            # update rank
+            User.aggregate(
+                [
+                    {"$setWindowFields": {"sortBy": {"score": -1}, "output": {"rank": {"$denseRank": {}}}}},
+                    {"$merge": {"into": "users", "on": "_id", "whenMatched": "replace"}},
+                ]
+            )
+
             return {"msg": "Accepted"}
 
         CommonLog.insert_one(

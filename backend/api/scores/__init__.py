@@ -5,18 +5,7 @@ from utils import response_id_to_hex
 scores = Blueprint("scores", __name__)
 
 
-# TODO: maintain rank
 @scores.route("/scores", methods=["GET"])
 @response_id_to_hex
 def scoreboard():
-    return User.aggregate(
-        [
-            {
-                "$setWindowFields": {
-                    "sortBy": {"score": -1},
-                    "output": {"rank": {"$rank": {}}},
-                },
-            }
-        ]
-    )
-    # return list(User.find({"role": "user"}, {"username": 1, "score": 1}))
+    return list(User.find({"role": "user"}, {"username": 1, "score": 1, "rank": 1}).sort({"rank": 1}))
