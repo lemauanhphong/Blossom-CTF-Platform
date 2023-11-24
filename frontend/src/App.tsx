@@ -16,7 +16,7 @@ function App() {
     // const handleSelectItem = (item: string) => {
     //     console.log(item);
     // };
-    
+
     // return <ListGroup items={items} heading="Cities" onSelectItem={handleSelectItem} />;
     let isLoggedIn = localStorage.getItem("isLoggedIn");
     let isAdmin = localStorage.getItem("isAdmin");
@@ -40,8 +40,21 @@ function App() {
                         path="/login"
                         element={isLoggedIn ? <Navigate to="/" /> : <Login />}
                     />
-                    <Route path="/scoreboard" element={<Scoreboard />} />
-                    <Route path="/admin" element={<Admin />} />
+                    <Route
+                        path="/scoreboard"
+                        element={
+                            <Scoreboard
+                                isLoggedIn={isLoggedIn}
+                                isAdmin={isAdmin}
+                            />
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <Admin isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
+                        }
+                    />
                     <Route
                         path="/challenges"
                         element={
