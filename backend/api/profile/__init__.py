@@ -1,3 +1,4 @@
+import bson
 from database import User
 from flask import Blueprint, session
 from utils import response_id_to_hex
@@ -17,7 +18,7 @@ def get_profile(_id=None):
 
         _id = session["_id"]
 
-    if user := User.find_one({"_id": _id}, {"password": 0, "role": 0}):
+    if user := User.find_one({"_id": bson.ObjectId(_id)}, {"password": 0, "role": 0}):
         return user
 
     return {"msg": "User not found"}, 404
