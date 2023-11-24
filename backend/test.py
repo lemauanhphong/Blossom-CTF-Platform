@@ -56,8 +56,8 @@ class Api:
         r = self.s.put(TARGET + "/admin/challs", json=chall)
         return r.json()
 
-    def delete_chall(self, name):
-        r = self.s.delete(TARGET + "/admin/challs", json={"name": name})
+    def delete_chall(self, _id):
+        r = self.s.delete(TARGET + "/admin/challs/" + _id)
         return r.json()
 
     def get_current_profile(self):
@@ -72,16 +72,16 @@ class Api:
         r = self.s.get(TARGET + "/scores")
         return r.json()
 
-    def get_solves(self, challname):
-        r = self.s.get(TARGET + "/solves/" + challname)
+    def get_solves(self, _id):
+        r = self.s.get(TARGET + "/solves/" + _id)
         return r.json()
 
     def categories(self):
         r = self.s.get(TARGET + "/categories")
         return r.json()
 
-    def submit_flag(self, name, flag):
-        r = self.s.post(TARGET + "/flag", json={"name": name, "flag": flag})
+    def submit_flag(self, _id, flag):
+        r = self.s.post(TARGET + "/flag", json={"_id": _id, "flag": flag})
         return r.json()
 
     def get_file(self, fileid):
@@ -110,20 +110,20 @@ def populate_scoreboard():
     user = Api("user", "user")
     user.login()
 
-    flags = []
-
     for _ in range(5):
-        new_chall = generate_new_challs()
-        pprint(admin.add_chall(new_chall))
-        flags.append((new_chall["name"], new_chall["flag"]))
+        pprint(admin.add_chall(generate_new_challs()))
+
+    challs = admin.admin_get_challs()
+    print(challs)
 
     for _ in range(5):
         rand_user = Api()
         rand_user.register()
         rand_user.login()
-        for name, flag in random.choices(flags, k=random.randint(0, len(flags))):
-            pprint(user.submit_flag(name, flag))
-            pprint(rand_user.submit_flag(name, flag))
+        for x in random.choices(challs, k=random.randint(0, len(challs))):
+            print(x["_id"], x["flag"])
+            pprint(user.submit_flag(x["_id"], x["flag"]))
+            pprint(rand_user.submit_flag(x["_id"], x["flag"]))
 
     pprint(admin.get_challs())
 
@@ -133,3 +133,4 @@ if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
     pprint(user.get_current_profile())
+    pprint(user.get_public_profile('6560ceab10c3d6a671d51b73'))

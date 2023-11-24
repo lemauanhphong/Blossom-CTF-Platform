@@ -62,7 +62,7 @@ def add_update_chall():
     # update chall
     else:
         if not data.get("_id"):
-            return {"msg": f"Missing challenge _id"}, 400
+            return {"msg": f"Missing challenge id"}, 400
 
         try:
             if not Challenge.update_one(
@@ -86,7 +86,7 @@ def add_update_chall():
             )
 
         except InvalidId:
-            return {"msg": "Invalid challenge _id"}, 400
+            return {"msg": "Invalid challenge id"}, 400
 
         except DuplicateKeyError:
             return {"msg": "Challenge name already exists"}, 409
@@ -94,10 +94,13 @@ def add_update_chall():
         return {"msg": "Challenge updated"}
 
 
-@admin.route("/challs", methods=["DELETE"])
+@admin.route("/challs/<_id>", methods=["DELETE"])
 @require_admin
-def delete_chall():
-    if not Challenge.delete_one({"_id": request.get_json().get("_id")}).deleted_count:
-        return {"msg": "Challenge not found"}, 404
+def delete_chall(_id=None):
+    try:
+        if not Challenge.delete_one({"_id": _id}).deleted_count:
+            return {"msg": "Challenge not found"}, 404
+    except InvalidId:
+        return {"msg": "Invalid challenge id"}, 400
 
     return {"msg": "Challenge deleted"}
