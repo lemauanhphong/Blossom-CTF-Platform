@@ -6,6 +6,7 @@ from bson.errors import InvalidId
 from database import Challenge
 from flask import Blueprint, request
 from pymongo.errors import DuplicateKeyError
+from utils import response_id_to_hex
 
 from .helpers import require_admin
 
@@ -16,12 +17,9 @@ MAXIMUM_FILE_SIZE = 50 * 1024 * 1024
 
 @admin.route("/challs", methods=["GET"])
 @require_admin
+@response_id_to_hex
 def get_challs():
-    result = []
-    for chall in Challenge.find({}, {"files.data": 0}):
-        chall["_id"] = str(chall["_id"])
-        result.append(chall)
-    return result
+    return list(Challenge.find({}, {"files.data": 0}))
 
 
 @admin.route("/challs", methods=["POST", "PUT"])
@@ -75,12 +73,17 @@ def add_update_chall():
                         "category": data["category"],
                         "content": data.get("content"),
                         "flag": data["flag"],
-                        "files": files,
                         "score": data["score"],
-                    }
+                    },
+                    "$push": {"files": files},
                 },
             ).modified_count:
-                return {"msg": "Challenge not found"}
+                return {"msg": "Challenge not found"}, 404
+
+            Challenge.update_one(
+                {"_id": bson.ObjectId(data["_id"])},
+                {"$pull": {"files.fileid": {"$in": [request.get_json().get("files_remove")]}}},
+            )
 
         except InvalidId:
             return {"msg": "Invalid challenge _id"}, 400
@@ -94,7 +97,7 @@ def add_update_chall():
 @admin.route("/challs", methods=["DELETE"])
 @require_admin
 def delete_chall():
-    if not Challenge.delete_one({"name": request.get_json().get("name")}).deleted_count:
+    if not Challenge.delete_one({"_id": request.get_json().get("_id")}).deleted_count:
         return {"msg": "Challenge not found"}, 404
 
     return {"msg": "Challenge deleted"}
