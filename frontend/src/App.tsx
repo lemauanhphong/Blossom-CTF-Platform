@@ -8,15 +8,15 @@ import Login from "./pages/Login";
 import Challenges from "./pages/Challenges";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
-import "./App.css";
 import Logout from "./pages/Logout";
+import "./App.css";
 function App() {
     // let items = [];
 
     // const handleSelectItem = (item: string) => {
     //     console.log(item);
     // };
-
+    
     // return <ListGroup items={items} heading="Cities" onSelectItem={handleSelectItem} />;
     let isLoggedIn = localStorage.getItem("isLoggedIn");
     let isAdmin = localStorage.getItem("isAdmin");

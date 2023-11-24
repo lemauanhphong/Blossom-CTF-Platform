@@ -11,7 +11,6 @@ TARGET = "http://localhost:5000"
 def randstr():
     return "".join(random.choices(string.ascii_letters, k=10))
 
-
 class Api:
     def __init__(self, username="", password=""):
         self.s = Session()
