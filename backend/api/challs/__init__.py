@@ -3,16 +3,18 @@ from datetime import datetime
 from api.auth.helpers import require_login
 from database import Challenge, CommonLog, SolvedLog
 from flask import Blueprint, request, session
+from utils import require_contest_running
 
 challs = Blueprint("challs", __name__)
 
 
 @challs.route("/challs", methods=["GET"])
 @require_login
+@require_contest_running
 def get_challs():
     res = []
     for chall in Challenge.find({}, {"_id": 0, "flag": 0, "files.data": 0}):
-        chall["solved"] = bool(SolvedLog.find_one({"name": session["username"], "challenge": chall["name"]}))
+        chall["solved"] = bool(SolvedLog.find_one({"username": session["username"], "challenge": chall["name"]}))
         res.append(chall)
     return res
 
@@ -33,6 +35,7 @@ def get_categories():
 
 @challs.route("/flag", methods=["POST"])
 @require_login
+@require_contest_running
 def submit_flag():
     name = request.get_json().get("name")
     flag = request.get_json().get("flag")
@@ -73,4 +76,4 @@ def submit_flag():
 
         return {"msg": "Wrong"}, 422
     else:
-        return {"msg": "Challenge not found"}
+        return {"msg": "Challenge not found"}, 404

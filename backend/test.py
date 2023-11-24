@@ -113,3 +113,7 @@ chall = {
 pprint(add_chall(chall))
 pprint(get_challs())
 pprint(categories())
+
+pprint(submit_flag(chall["name"], chall["flag"]))
+pprint(get_challs())
+pprint(categories())

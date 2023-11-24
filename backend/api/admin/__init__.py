@@ -75,12 +75,17 @@ def add_update_chall():
                         "category": data["category"],
                         "content": data.get("content"),
                         "flag": data["flag"],
-                        "files": files,
                         "score": data["score"],
-                    }
+                    },
+                    "$push": {"files": files},
                 },
             ).modified_count:
-                return {"msg": "Challenge not found"}
+                return {"msg": "Challenge not found"}, 404
+
+            Challenge.update_one(
+                {"_id": bson.ObjectId(data["_id"])},
+                {"$pull": {"files.fileid": {"$in": [request.get_json().get("files_remove")]}}},
+            )
 
         except InvalidId:
             return {"msg": "Invalid challenge _id"}, 400

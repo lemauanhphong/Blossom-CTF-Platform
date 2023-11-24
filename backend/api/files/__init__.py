@@ -1,9 +1,9 @@
 import io
-from pprint import pprint
 
 from api.auth.helpers import require_login
 from database import Challenge
 from flask import Blueprint, request, send_file
+from utils import require_contest_running
 
 files = Blueprint("files", __name__)
 
@@ -12,6 +12,7 @@ files = Blueprint("files", __name__)
 
 @files.route("/files", methods=["GET"])
 @require_login
+@require_contest_running
 def get_file():
     if file := Challenge.find_one({"files.fileid": request.args.get("fileid")}, {"_id": 0, "files.$": 1}):
         file = file["files"][0]
