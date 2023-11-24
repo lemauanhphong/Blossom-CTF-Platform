@@ -3,6 +3,7 @@ import Files from "./Files";
 interface Props {
     handleOnSubmit: any;
     challenges: {
+        _id: string;
         name: string;
         category: string;
         content: string;
@@ -18,7 +19,7 @@ export default ({ handleOnSubmit, challenges }: Props) => {
         <>
             {challenges.map((challenge) => (
                 <div
-                    key={challenge["name"]}
+                    key={challenge["_id"]}
                     className="rounded p-3 mb-3 text-white"
                     style={{
                         backgroundColor: "#222222",
@@ -36,7 +37,7 @@ export default ({ handleOnSubmit, challenges }: Props) => {
                         </div>
                     </div>
                     <div className="row">
-                        <form onSubmit={(e) => handleOnSubmit(e, challenge.name)}>
+                        <form onSubmit={(e) => handleOnSubmit(e, challenge._id)}>
                             <div className="form-handleOnSubmit">
                                 <hr />
                                 <div className="mb-3">{challenge.content}</div>

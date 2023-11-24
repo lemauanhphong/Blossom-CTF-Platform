@@ -130,4 +130,4 @@ if __name__ == "__main__":
     populate_scoreboard()
     user = Api("user", "user")
     user.login()
-    pprint(user.scores())
+    pprint(user.add_chall())
