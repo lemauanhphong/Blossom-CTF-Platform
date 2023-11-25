@@ -60,12 +60,8 @@ class Api:
         r = self.s.delete(TARGET + "/admin/challs/" + _id)
         return r.json()
 
-    def get_current_profile(self):
-        r = self.s.get(TARGET + "/profile")
-        return r.json()
-
-    def get_public_profile(self, _id):
-        r = self.s.get(TARGET + "/profile/" + _id)
+    def get_profile(self, uid=""):
+        r = self.s.get(TARGET + "/profile" + uid)
         return r.json()
 
     def scores(self):
@@ -129,7 +125,7 @@ def populate_scoreboard():
 if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
-    populate_scoreboard()
-    pprint(user.scores())
-    pprint(user.get_challs())
-    pprint(user.get_solves("6561739fc74eca73c3982ad6"))
+    # populate_scoreboard()
+    # pprint(user.scores())
+    # pprint(user.get_challs())
+    pprint(user.get_profile())

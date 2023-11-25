@@ -18,10 +18,22 @@ Challenge.create_index("name", unique=True)
 # TODO: handle admin account
 try:
     User.insert_one(
-        {"username": "admin", "password": bcrypt.hashpw(b"admin", bcrypt.gensalt()), "role": "admin", "score": 0}
+        {
+            "username": "admin",
+            "password": bcrypt.hashpw(b"admin", bcrypt.gensalt()),
+            "role": "admin",
+            "score": 0,
+            "rank": 0,
+        }
     )
     User.insert_one(
-        {"username": "user", "password": bcrypt.hashpw(b"user", bcrypt.gensalt()), "role": "user", "score": 0}
+        {
+            "username": "user",
+            "password": bcrypt.hashpw(b"user", bcrypt.gensalt()),
+            "role": "user",
+            "score": 0,
+            "rank": 0,
+        }
     )
 except DuplicateKeyError:
     pass
