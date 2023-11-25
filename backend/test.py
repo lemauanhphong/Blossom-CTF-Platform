@@ -130,4 +130,4 @@ if __name__ == "__main__":
     populate_scoreboard()
     # pprint(user.scores())
     # pprint(user.get_profile())
-    # pprint(user.get_solves(""))
+    # pprint(user.get_solves())
