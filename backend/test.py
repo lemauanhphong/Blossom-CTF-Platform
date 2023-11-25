@@ -5,7 +5,7 @@ from pprint import pprint
 
 from requests import Session
 
-TARGET = "http://localhost:5000"
+TARGET = "http://localhost/api"
 
 
 def randstr():
