@@ -92,8 +92,10 @@ def generate_new_challs():
         "content": randstr(),
         "flag": "flag{%s}" % randstr(),
         "files": [
-            {"filename": "a.data", "data": b64encode(randstr().encode()).decode()},
-            {"filename": "b.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "a.data", "data": b64encode(
+                randstr().encode()).decode()},
+            {"filename": "b.mkv", "data": b64encode(
+                randstr().encode()).decode()},
         ],
         "score": random.randint(0, 1000),
     }
@@ -128,4 +130,4 @@ if __name__ == "__main__":
     populate_scoreboard()
     # pprint(user.scores())
     # pprint(user.get_profile())
-    # pprint(user.get_solves("6561d7a5d95bdbedcf2a3cd0"))
+    # pprint(user.get_solves(""))
