@@ -57,14 +57,21 @@ def add_update_chall():
 
         return {"msg": "Challenge added"}
 
-    # TODO: handle file update
     # update chall
     else:
         if not data.get("cid"):
             return {"msg": f"Missing challenge id"}, 400
 
         try:
+            # remove files first
             if not Challenge.update_one(
+                {"_id": bson.ObjectId(data["cid"])},
+                {"$pull": {"files": {"fileid": {"$in": request.get_json().get("files_remove")}}}},
+            ).matched_count:
+                return {"msg": "Challenge not found"}, 404
+
+            # then update
+            Challenge.update_one(
                 {"_id": bson.ObjectId(data["cid"])},
                 {
                     "$set": {
@@ -74,14 +81,8 @@ def add_update_chall():
                         "flag": data["flag"],
                         "score": data["score"],
                     },
-                    "$push": {"files": files},
+                    "$push": {"files": {"$each": files}},
                 },
-            ).modified_count:
-                return {"msg": "Challenge not found"}, 404
-
-            Challenge.update_one(
-                {"_id": bson.ObjectId(data["cid"])},
-                {"$pull": {"files.fileid": {"$in": [request.get_json().get("files_remove")]}}},
             )
 
         except InvalidId:

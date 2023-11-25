@@ -1,4 +1,5 @@
 import random
+import json
 import string
 from base64 import b64encode
 from pprint import pprint
@@ -53,7 +54,8 @@ class Api:
         return r.json()
 
     def update_chall(self, chall):
-        r = self.s.put(TARGET + "/admin/challs", json=chall)
+        r = self.s.patch(TARGET + "/admin/challs", json=chall)
+        print(r.text)
         return r.json()
 
     def delete_chall(self, _id):
@@ -94,6 +96,10 @@ def generate_new_challs():
         "files": [
             {"filename": "a.data", "data": b64encode(randstr().encode()).decode()},
             {"filename": "b.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "c.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "d.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "e.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "f.mkv", "data": b64encode(randstr().encode()).decode()},
         ],
         "score": random.randint(0, 1000),
     }
@@ -122,10 +128,32 @@ def populate_scoreboard():
     pprint(admin.admin_get_challs())
 
 
+def check_patch():
+    admin = Api("admin", "admin")
+    admin.login()
+
+    admin.add_chall(generate_new_challs())
+    challs = admin.admin_get_challs()
+    pprint(challs)
+
+    chall = {
+        "cid": "65621191ac55596e60a21ad4",
+        "category": "wed",
+        "content": "content so mot",
+        "files": [
+            {"filename": "awkdhawdaowdj.data", "data": b64encode(randstr().encode()).decode()},
+        ],
+        "files_remove": ["9dd9a019452b4531bc82642f5c9bdfd2", "14ece6ad0ba841939c146a8a885ff242", "55778d4656ab489793e5d733590715e4"],
+        "flag": "flag{day la flag}",
+        "name": "miniwafhehe",
+        "score": 999,
+    }
+    admin.update_chall(chall)
+    pprint(admin.admin_get_challs())
+
+
 if __name__ == "__main__":
-    user = Api("user", "user")
-    user.login()
-    populate_scoreboard()
-    # pprint(user.scores())
-    # pprint(user.get_profile())
-    # pprint(user.get_solves("6561d7a5d95bdbedcf2a3cd0"))
+    check_patch()
+    # user = Api("user", "user")
+    # user.login()
+    # populate_scoreboard()
