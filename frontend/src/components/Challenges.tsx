@@ -1,4 +1,5 @@
 import Files from "./Files";
+import Solves from "./Solves";
 
 interface Props {
     handleOnSubmit: any;
@@ -15,6 +16,32 @@ interface Props {
 }
 
 export default ({ handleOnSubmit, challenges }: Props) => {
+    const solves = [
+        {
+            time: "1",
+            username: "as00000000000000000000000000000000000000000000000d",
+        },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+        { time: "2", username: "123" },
+    ];
+
     return (
         <>
             {challenges.map((challenge) => (
@@ -32,12 +59,22 @@ export default ({ handleOnSubmit, challenges }: Props) => {
                         <div className="col-6 fw-bold">
                             {challenge.category}/{challenge.name}
                         </div>
-                        <div className="col-6 fw-bold d-flex justify-content-end">
-                            {challenge.solves} solves / {challenge.score} point
+                        <div className="col-6 d-flex justify-content-end">
+                            <div
+                                className="btn text-light fw-bold"
+                                data-bs-toggle="modal"
+                                data-bs-target="#solvesModal"
+                            >
+                                {challenge.solves} solves / {challenge.score}{" "}
+                                point
+                            </div>
+                            <Solves solves={solves}></Solves>
                         </div>
                     </div>
                     <div className="row">
-                        <form onSubmit={(e) => handleOnSubmit(e, challenge._id)}>
+                        <form
+                            onSubmit={(e) => handleOnSubmit(e, challenge._id)}
+                        >
                             <div className="form-handleOnSubmit">
                                 <hr />
                                 <div className="mb-3">{challenge.content}</div>
