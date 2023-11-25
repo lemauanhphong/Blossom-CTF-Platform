@@ -125,7 +125,7 @@ def populate_scoreboard():
 if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
-    # populate_scoreboard()
+    populate_scoreboard()
     # pprint(user.scores())
     # pprint(user.get_challs())
-    pprint(user.get_profile())
+    # pprint(user.get_profile())

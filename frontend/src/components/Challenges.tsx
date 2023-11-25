@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Files from "./Files";
 import Solves from "./Solves";
+import { getSolves } from "../api/GetSolves";
 
 interface Props {
     handleOnSubmit: any;
@@ -16,31 +18,7 @@ interface Props {
 }
 
 export default ({ handleOnSubmit, challenges }: Props) => {
-    const solves = [
-        {
-            time: "1",
-            username: "as00000000000000000000000000000000000000000000000d",
-        },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-        { time: "2", username: "123" },
-    ];
+    const [solves, setSolves] = useState([]);
 
     return (
         <>
@@ -64,6 +42,9 @@ export default ({ handleOnSubmit, challenges }: Props) => {
                                 className="btn text-light fw-bold"
                                 data-bs-toggle="modal"
                                 data-bs-target="#solvesModal"
+                                onClick={async () =>
+                                    setSolves(await getSolves(challenge["_id"]))
+                                }
                             >
                                 {challenge.solves} solves / {challenge.score}{" "}
                                 point
