@@ -1,9 +1,9 @@
+import os
 from datetime import datetime
 from functools import wraps
 
 from config import END_TIME, START_TIME, TIMEZONE
 from flask import request
-from zoneinfo import ZoneInfo
 
 COMMON_FEILD_DATA_TYPE = {"score": int, "files": dict, "files_remove": list}
 
@@ -51,10 +51,10 @@ def require_contest_running(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            now = datetime.now(ZoneInfo(TIMEZONE)).timestamp()
-            if datetime.fromisoformat(START_TIME).replace(tzinfo=ZoneInfo(TIMEZONE)).timestamp() > now:
+            now = datetime.now().timestamp()
+            if datetime.fromisoformat(START_TIME).timestamp() > now:
                 return {"msg": "Contest has not started yet"}
-            if datetime.fromisoformat(END_TIME).replace(tzinfo=ZoneInfo(TIMEZONE)).timestamp() < now:
+            if datetime.fromisoformat(END_TIME).timestamp() < now:
                 return {"msg": "Contest has ended"}
         except ValueError:
             return {"msg": "Invalid contest time"}, 500
@@ -62,3 +62,7 @@ def require_contest_running(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def config_timezone():
+    os.environ["TZ"] = TIMEZONE
