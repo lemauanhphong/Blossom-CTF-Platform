@@ -2,7 +2,7 @@ import bcrypt
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 
-client = MongoClient("mongo", 27017, username="root", password="123456", serverSelectionTimeoutMS=5000)
+client = MongoClient("mongo", 27017, username="root", password="123456", serverSelectionTimeoutMS=5000, tz_aware=True)
 
 db = client["blossom"]
 
