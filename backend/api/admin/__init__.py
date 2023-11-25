@@ -33,9 +33,8 @@ def add_update_chall():
 
     try:
         files = []
-        for filename, filedata in data.get("files", {}).items():
-            f = {"fileid": uuid4().hex, "filename": filename, "data": b64decode(filedata)}
-            files.append(f)
+        for f in data.get("files", []):
+            files.append({"fileid": uuid4().hex, "filename": f.get("filename"), "data": b64decode(f.get("data"))})
     except:
         return {"msg": "Unable to decode file data"}, 400
 
@@ -61,12 +60,12 @@ def add_update_chall():
     # TODO: handle file update
     # update chall
     else:
-        if not data.get("_id"):
+        if not data.get("cid"):
             return {"msg": f"Missing challenge id"}, 400
 
         try:
             if not Challenge.update_one(
-                {"_id": bson.ObjectId(data["_id"])},
+                {"_id": bson.ObjectId(data["cid"])},
                 {
                     "$set": {
                         "name": data["name"],
@@ -81,7 +80,7 @@ def add_update_chall():
                 return {"msg": "Challenge not found"}, 404
 
             Challenge.update_one(
-                {"_id": bson.ObjectId(data["_id"])},
+                {"_id": bson.ObjectId(data["cid"])},
                 {"$pull": {"files.fileid": {"$in": [request.get_json().get("files_remove")]}}},
             )
 
@@ -94,11 +93,11 @@ def add_update_chall():
         return {"msg": "Challenge updated"}
 
 
-@admin.route("/challs/<_id>", methods=["DELETE"])
+@admin.route("/challs/<cid>", methods=["DELETE"])
 @require_admin
-def delete_chall(_id=None):
+def delete_chall(cid=None):
     try:
-        if not Challenge.delete_one({"_id": _id}).deleted_count:
+        if not Challenge.delete_one({"_id": cid}).deleted_count:
             return {"msg": "Challenge not found"}, 404
     except InvalidId:
         return {"msg": "Invalid challenge id"}, 400

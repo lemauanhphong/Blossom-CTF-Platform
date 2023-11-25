@@ -5,7 +5,7 @@ from functools import wraps
 from config import END_TIME, START_TIME, TIMEZONE
 from flask import request
 
-COMMON_FEILD_DATA_TYPE = {"score": int, "files": dict, "files_remove": list}
+COMMON_FEILD_DATA_TYPE = {"score": int, "files": list, "files_remove": list}
 COMMON_BSON_ID_FIELD = {"_id", "uid", "cid"}
 
 
@@ -22,8 +22,8 @@ def sanitize():
                 return {"msg": f"{key} must be {COMMON_FEILD_DATA_TYPE[key]}"}
 
             if key == "files":
-                for filename, filedata in value.items():
-                    if not isinstance(filename, str) and not isinstance(filedata, str):
+                for f in value:
+                    if not isinstance(f.get("filename"), str) and not isinstance(f.get("data"), str):
                         return {"msg": f"Mailformed file"}
 
         elif not isinstance(value, str):
