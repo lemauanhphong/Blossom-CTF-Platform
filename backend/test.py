@@ -5,7 +5,7 @@ from pprint import pprint
 
 from requests import Session
 
-TARGET = "http://localhost:5000"
+TARGET = "http://localhost/api"
 
 
 def randstr():
@@ -92,8 +92,10 @@ def generate_new_challs():
         "content": randstr(),
         "flag": "flag{%s}" % randstr(),
         "files": [
-            {"filename": "a.data", "data": b64encode(randstr().encode()).decode()},
-            {"filename": "b.mkv", "data": b64encode(randstr().encode()).decode()},
+            {"filename": "a.data", "data": b64encode(
+                randstr().encode()).decode()},
+            {"filename": "b.mkv", "data": b64encode(
+                randstr().encode()).decode()},
         ],
         "score": random.randint(0, 1000),
     }
@@ -127,5 +129,5 @@ if __name__ == "__main__":
     user.login()
     populate_scoreboard()
     # pprint(user.scores())
+    # pprint(user.get_challs())
     # pprint(user.get_profile())
-    # pprint(user.get_solves("6561d7a5d95bdbedcf2a3cd0"))
