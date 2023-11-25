@@ -6,7 +6,7 @@ from flask import session
 def require_login(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not session.get("username"):
+        if not session.get("uid"):
             return {"msg": "Please login first"}, 401
         return func(*args, **kwargs)
 
