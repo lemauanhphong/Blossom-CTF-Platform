@@ -2,7 +2,7 @@ import io
 
 from api.auth.helpers import require_login
 from database import Challenge
-from flask import Blueprint, request, send_file
+from flask import Blueprint, send_file
 from utils import require_contest_running
 
 files = Blueprint("files", __name__)
