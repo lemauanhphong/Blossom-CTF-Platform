@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
+import { addChallenge, updateChallenge } from "../api/Admin";
 import Swal from "sweetalert2";
 interface Problem {
     _id: string;
@@ -56,7 +56,7 @@ export default ({ challenge }: Props) => {
             });
         } else {
             const response = await updateChallenge({
-                cid: challenge._id,
+                _id: challenge._id,
                 category: category,
                 content: description,
                 files: [],
@@ -64,6 +64,7 @@ export default ({ challenge }: Props) => {
                 name: name,
                 score: score,
             });
+            console.log(response);
             if (response.msp == "ok") {
                 Swal.fire({
                     position: "top-end",
