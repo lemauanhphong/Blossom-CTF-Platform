@@ -91,10 +91,12 @@ def generate_new_challs():
         "category": random.choice(["wed", "pown", "4n6", "cryto"]),
         "content": randstr(),
         "flag": "flag{%s}" % randstr(),
-        "files": {
-            "a.data": b64encode(randstr().encode()).decode(),
-            "b.mkv": b64encode(randstr().encode()).decode(),
-        },
+        "files": [
+            {"filename": "a.data", "data": b64encode(
+                randstr().encode()).decode()},
+            {"filename": "b.mkv", "data": b64encode(
+                randstr().encode()).decode()},
+        ],
         "score": random.randint(0, 1000),
     }
 
@@ -119,7 +121,7 @@ def populate_scoreboard():
             pprint(user.submit_flag(x["_id"], x["flag"]))
             pprint(rand_user.submit_flag(x["_id"], x["flag"]))
 
-    pprint(admin.get_challs())
+    pprint(admin.admin_get_challs())
 
 
 if __name__ == "__main__":
