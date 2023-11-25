@@ -1,8 +1,11 @@
 import { useCallback, useState } from "react";
+import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
 interface Problem {
+    _id: string;
     flag: string;
     content: string;
     category: string;
+    files: [];
     score: number;
     name: string;
 }
@@ -30,7 +33,7 @@ export default ({ challenge }: Props) => {
 
     const [score, setScore] = useState(challenge.score);
     const handleScoreChange = useCallback(
-        (e: any) => setScore(e.target.value),
+        (e: any) => setScore(Number.parseInt(e.target.value)),
         []
     );
 
@@ -39,14 +42,39 @@ export default ({ challenge }: Props) => {
         (e: any) => setName(e.target.value),
         []
     );
+    const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (challenge._id === "") {
+            await addChallenge({
+                category: category,
+                content: description,
+                files: {},
+                flag: flag,
+                name: name,
+                score: score,
+            });
+        } else {
+            const response = await updateChallenge({
+                _id: challenge._id,
+                category: category,
+                content: description,
+                files: {},
+                flag: flag,
+                name: name,
+                score: score,
+            });
+            console.log(response);
+        }
+    };
     return (
         <div className="row m-3">
             <div className="col-10 rounded bg-rctf text-light offset-1 p-3">
-                <form className="form-group">
+                <form className="form-group" onSubmit={handleUpdate}>
                     <div>
                         <div className="row">
                             <div className="col-6">
                                 <input
+                                    required
                                     className="mb-2 input-group input-group-text bg-dark text-light"
                                     autoComplete="off"
                                     placeholder="Category"
@@ -54,6 +82,7 @@ export default ({ challenge }: Props) => {
                                     onChange={handleCategoryChange}
                                 />
                                 <input
+                                    required
                                     className="mb-2 input-group input-group-text bg-dark text-light"
                                     autoComplete="off"
                                     placeholder="Problem name"
@@ -64,6 +93,7 @@ export default ({ challenge }: Props) => {
 
                             <div className="col-6 align-items-center">
                                 <input
+                                    required
                                     className="mb-2 input-group input-group-text bg-dark text-light"
                                     autoComplete="off"
                                     type="number"
@@ -87,6 +117,7 @@ export default ({ challenge }: Props) => {
                         ></textarea>
                         <div className="">
                             <input
+                                required
                                 className="input-group input-group-text bg-dark text-light mb-3 text-start"
                                 autoComplete="off"
                                 placeholder="Flag"
