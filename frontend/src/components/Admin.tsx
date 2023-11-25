@@ -5,8 +5,7 @@ export default () => {
     const [challenges, setChallenges] = useState([]);
     useEffect(() => {
         (async () => {
-            const all_challenges = await getChallenges();
-            setChallenges(all_challenges);
+            setChallenges(await getChallenges());
         })();
     }, []);
     // console.log(challenges);

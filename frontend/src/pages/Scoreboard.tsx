@@ -11,7 +11,7 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
         <>
             <NavBar
                 items={navBarItems(isLoggedIn, isAdmin)}
-                selectedIndex={2}
+                selectedIndex={1}
             />
             <Scoreboard />;
         </>
