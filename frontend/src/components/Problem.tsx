@@ -77,7 +77,8 @@ export default ({ challenge }: Props) => {
                             <div className="col-10 offset-1 border mb-3 mt-3"></div>
                         </div>
                         <textarea
-                            className=" input-group input-group-text bg-dark text-light mb-3 text-start"
+                            style={{ height: "128px" }}
+                            className=" input-group input-group-text bg-dark text-light mb-3 text-start text-wrap"
                             autoComplete="off"
                             autoCorrect="off"
                             placeholder="Description"

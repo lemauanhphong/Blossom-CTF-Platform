@@ -64,7 +64,15 @@ function App() {
                             />
                         }
                     />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route
+                        path="/profile"
+                        element={
+                            <Profile
+                                isLoggedIn={isLoggedIn}
+                                isAdmin={isAdmin}
+                            />
+                        }
+                    />
                     <Route path="/logout" element={<Logout />} />
                 </Routes>
             </BrowserRouter>

@@ -1,5 +1,4 @@
 import { request } from "../utils";
-import Swal from "sweetalert2";
 export const getChallenges = async () => {
     return (await request('GET','/admin/challs')).data
 }
