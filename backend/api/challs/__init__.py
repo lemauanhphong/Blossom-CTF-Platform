@@ -26,6 +26,7 @@ def get_challs():
 @challs.route("/solves/<cid>", methods=["GET"])
 @require_login
 @require_contest_running
+@response_id_to_hex
 def get_solves(cid=None):
     try:
         result = []
