@@ -57,15 +57,22 @@ def add_update_chall():
 
         return {"msg": "Challenge added"}
 
-    # TODO: handle file update
     # update chall
     else:
-        if not data.get("cid"):
+        if not data.get("_id"):
             return {"msg": f"Missing challenge id"}, 400
 
         try:
+            # remove files first
             if not Challenge.update_one(
-                {"_id": bson.ObjectId(data["cid"])},
+                {"_id": bson.ObjectId(data["_id"])},
+                {"$pull": {"files": {"fileid": {"$in": request.get_json().get("files_remove")}}}},
+            ).matched_count:
+                return {"msg": "Challenge not found"}, 404
+
+            # then update
+            Challenge.update_one(
+                {"_id": bson.ObjectId(data["_id"])},
                 {
                     "$set": {
                         "name": data["name"],
@@ -74,14 +81,8 @@ def add_update_chall():
                         "flag": data["flag"],
                         "score": data["score"],
                     },
-                    "$push": {"files": files},
+                    "$push": {"files": {"$each": files}},
                 },
-            ).modified_count:
-                return {"msg": "Challenge not found"}, 404
-
-            Challenge.update_one(
-                {"_id": bson.ObjectId(data["cid"])},
-                {"$pull": {"files.fileid": {"$in": [request.get_json().get("files_remove")]}}},
             )
 
         except InvalidId:
@@ -93,11 +94,11 @@ def add_update_chall():
         return {"msg": "Challenge updated"}
 
 
-@admin.route("/challs/<cid>", methods=["DELETE"])
+@admin.route("/challs/<_id>", methods=["DELETE"])
 @require_admin
-def delete_chall(cid=None):
+def delete_chall(_id=None):
     try:
-        if not Challenge.delete_one({"_id": cid}).deleted_count:
+        if not Challenge.delete_one({"_id": _id}).deleted_count:
             return {"msg": "Challenge not found"}, 404
     except InvalidId:
         return {"msg": "Invalid challenge id"}, 400
