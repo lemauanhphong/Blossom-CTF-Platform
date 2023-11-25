@@ -76,10 +76,10 @@ export default ({ isLoggedIn, isAdmin }: Props) => {
         }
     };
 
-    const updateChallengesState = async (e: FormEvent, name: string) => {
+    const updateChallengesState = async (e: FormEvent, _id: string) => {
         e.preventDefault();
         const isSuccessFlag = await submitFlag(
-            name,
+            _id,
             ((e.target as HTMLFormElement)[0] as HTMLInputElement).value
         );
         if (isSuccessFlag) setRerenderSwitch(rerenderSwitch ^ 1);

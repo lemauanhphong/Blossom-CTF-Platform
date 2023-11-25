@@ -1,8 +1,8 @@
 import { request } from "../utils";
 import Swal from "sweetalert2";
 
-export const submitFlag = async (name: string, flag: string) => {
-    const resp = await request("POST", "/flag", { name, flag });
+export const submitFlag = async (_id: string, flag: string) => {
+    const resp = await request("POST", "/flag", { _id, flag });
     if (resp?.status === 200) {
         await Swal.fire({
             icon: "success",

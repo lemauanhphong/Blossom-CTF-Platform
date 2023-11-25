@@ -5,7 +5,7 @@ from pprint import pprint
 
 from requests import Session
 
-TARGET = "http://localhost:5000"
+TARGET = "http://localhost/api"
 
 
 def randstr():
@@ -128,3 +128,6 @@ if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
     populate_scoreboard()
+    # pprint(user.scores())
+    # pprint(user.get_challs())
+    # pprint(user.get_profile())
