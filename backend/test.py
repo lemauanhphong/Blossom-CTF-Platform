@@ -127,7 +127,9 @@ def populate_scoreboard():
 
 
 if __name__ == "__main__":
-    populate_scoreboard()
     user = Api("user", "user")
     user.login()
+    populate_scoreboard()
     pprint(user.scores())
+    pprint(user.get_challs())
+    pprint(user.get_solves("6561739fc74eca73c3982ad6"))
