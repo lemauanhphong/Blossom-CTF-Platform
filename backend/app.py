@@ -9,7 +9,9 @@ from api.scores import scores
 from flask import Flask
 from flask_cors import CORS
 from flask_session import Session
-from utils import sanitize
+from utils import config_timezone, sanitize
+
+config_timezone()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)

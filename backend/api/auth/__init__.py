@@ -25,8 +25,10 @@ def register():
                 "username": username,
                 "password": bcrypt.hashpw(password.encode(), bcrypt.gensalt()),
                 "role": "user",
+                "rank": 0,
                 "solves": 0,
                 "score": 0,
+                "totaltime": 0,
             }
         )
     except DuplicateKeyError:
