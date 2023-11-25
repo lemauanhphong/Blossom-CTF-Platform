@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
+import Swal from "sweetalert2";
 interface Problem {
     _id: string;
     flag: string;
@@ -48,22 +49,31 @@ export default ({ challenge }: Props) => {
             await addChallenge({
                 category: category,
                 content: description,
-                files: {},
+                files: [],
                 flag: flag,
                 name: name,
                 score: score,
             });
         } else {
             const response = await updateChallenge({
-                _id: challenge._id,
+                cid: challenge._id,
                 category: category,
                 content: description,
-                files: {},
+                files: [],
                 flag: flag,
                 name: name,
                 score: score,
             });
-            console.log(response);
+            if (response.msp == "ok") {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Problem updated successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            } else {
+            }
         }
     };
     return (
