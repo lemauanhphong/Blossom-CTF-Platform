@@ -5,7 +5,8 @@ from functools import wraps
 from config import END_TIME, START_TIME, TIMEZONE
 from flask import request
 
-COMMON_FEILD_DATA_TYPE = {"score": int, "files": dict, "files_remove": list}
+COMMON_FEILD_DATA_TYPE = {"score": int, "files": list, "files_remove": list}
+COMMON_BSON_ID_FIELD = {"_id", "uid", "cid"}
 
 
 def sanitize():
@@ -21,8 +22,8 @@ def sanitize():
                 return {"msg": f"{key} must be {COMMON_FEILD_DATA_TYPE[key]}"}
 
             if key == "files":
-                for filename, filedata in value.items():
-                    if not isinstance(filename, str) and not isinstance(filedata, str):
+                for f in value:
+                    if not isinstance(f.get("filename"), str) and not isinstance(f.get("data"), str):
                         return {"msg": f"Mailformed file"}
 
         elif not isinstance(value, str):
@@ -36,11 +37,13 @@ def response_id_to_hex(func):
 
         if isinstance(result, list):
             for i, obj in enumerate(result):
-                if "_id" in obj:
-                    result[i]["_id"] = str(obj["_id"])
+                for field in COMMON_BSON_ID_FIELD:
+                    if field in obj:
+                        result[i][field] = str(obj[field])
         else:
-            if "_id" in result:
-                result["_id"] = str(result["_id"])
+            for field in COMMON_BSON_ID_FIELD:
+                if field in result:
+                    result[field] = str(result[field])
 
         return result
 

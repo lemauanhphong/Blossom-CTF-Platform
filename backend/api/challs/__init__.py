@@ -26,13 +26,13 @@ def get_challs():
 @challs.route("/solves/<cid>", methods=["GET"])
 @require_login
 @require_contest_running
+@response_id_to_hex
 def get_solves(cid=None):
     try:
         result = []
         for x in SolvedLog.find({"cid": bson.ObjectId(cid)}, {"_id": 0, "uid": 1, "time": 1}):
-            result.append(
-                {"username": User.find_one({"_id": x["uid"]}, {"username": 1})["username"], "time": x["time"]}
-            )
+            user = User.find_one({"_id": x["uid"]}, {"username": 1})
+            result.append({"uid": user["_id"], "username": user["username"], "time": x["time"]})
         return result
     except InvalidId:
         return {"msg": "Invalid challenge id"}, 400
