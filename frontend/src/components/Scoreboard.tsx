@@ -1,3 +1,5 @@
+import NavBar from "./NavBar";
+import { navBarItems } from "../utils";
 import { useEffect, useState } from "react";
 import { getScoreboard } from "../api/Score";
 interface Score {
@@ -16,6 +18,7 @@ export default () => {
 
     return (
         <>
+            <NavBar items={navBarItems()} selectedIndex={1} />
             <div className="container">
                 <div className="row">
                     <div
