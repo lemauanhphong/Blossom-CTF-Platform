@@ -1,5 +1,5 @@
-import random
 import json
+import random
 import string
 from base64 import b64encode
 from pprint import pprint
@@ -112,12 +112,12 @@ def populate_scoreboard():
     user = Api("user", "user")
     user.login()
 
-    for _ in range(5):
+    for _ in range(10):
         pprint(admin.add_chall(generate_new_challs()))
 
     challs = admin.admin_get_challs()
 
-    for _ in range(5):
+    for _ in range(20):
         rand_user = Api()
         rand_user.register()
         rand_user.login()
@@ -152,8 +152,5 @@ def check_patch():
 if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
-    # populate_scoreboard()
-    admin = Api("admin", "admin")
-    admin.login()
-    # pprint(admin.delete_chall("6562d6babcce1308c699504f"))
-    pprint(admin.admin_get_challs())
+    populate_scoreboard()
+    pprint(user.scores())
