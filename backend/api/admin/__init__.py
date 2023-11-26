@@ -66,7 +66,7 @@ def add_update_chall():
             # remove files first
             if not Challenge.update_one(
                 {"_id": bson.ObjectId(data["_id"])},
-                {"$pull": {"files": {"fileid": {"$in": request.get_json().get("files_remove", [])}}}},
+                {"$pull": {"files": {"fileid": {"$in": request.get_json().get("files_remove")}}}},
             ).matched_count:
                 return {"msg": "Challenge not found"}, 404
 
