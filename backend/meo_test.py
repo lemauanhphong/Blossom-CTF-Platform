@@ -132,18 +132,15 @@ def check_patch():
     admin = Api("admin", "admin")
     admin.login()
 
-    admin.add_chall(generate_new_challs())
-    challs = admin.admin_get_challs()
-    pprint(challs)
+    # admin.add_chall(generate_new_challs())
+    # challs = admin.admin_get_challs()
+    # pprint(challs)
 
     chall = {
-        "cid": "65621191ac55596e60a21ad4",
+        "_id": "65621191ac55596e60a21ad4",
         "category": "wed",
         "content": "content so mot",
-        "files": [
-            {"filename": "awkdhawdaowdj.data", "data": b64encode(randstr().encode()).decode()},
-        ],
-        "files_remove": ["9dd9a019452b4531bc82642f5c9bdfd2", "14ece6ad0ba841939c146a8a885ff242", "55778d4656ab489793e5d733590715e4"],
+        "files": [],
         "flag": "flag{day la flag}",
         "name": "miniwafhehe",
         "score": 999,
