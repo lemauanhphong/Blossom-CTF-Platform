@@ -98,7 +98,7 @@ def add_update_chall():
 @require_admin
 def delete_chall(_id=None):
     try:
-        if not Challenge.delete_one({"_id": _id}).deleted_count:
+        if not Challenge.delete_one({"_id": bson.ObjectId(_id)}).deleted_count:
             return {"msg": "Challenge not found"}, 404
     except InvalidId:
         return {"msg": "Invalid challenge id"}, 400

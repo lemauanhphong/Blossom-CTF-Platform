@@ -132,9 +132,9 @@ def check_patch():
     admin = Api("admin", "admin")
     admin.login()
 
-    # admin.add_chall(generate_new_challs())
-    # challs = admin.admin_get_challs()
-    # pprint(challs)
+    admin.add_chall(generate_new_challs())
+    challs = admin.admin_get_challs()
+    pprint(challs)
 
     chall = {
         "_id": "65621191ac55596e60a21ad4",
@@ -150,7 +150,10 @@ def check_patch():
 
 
 if __name__ == "__main__":
-    check_patch()
-    # user = Api("user", "user")
-    # user.login()
+    user = Api("user", "user")
+    user.login()
     # populate_scoreboard()
+    admin = Api("admin", "admin")
+    admin.login()
+    # pprint(admin.delete_chall("6562d6babcce1308c699504f"))
+    pprint(admin.admin_get_challs())
