@@ -43,6 +43,23 @@ export default ({ challenge }: Props) => {
         (e: any) => setName(e.target.value),
         []
     );
+    const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        Swal.fire({
+            title: "Do you want to delete?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Don't",
+            denyButtonText: `Delete`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isDenied) {
+                // const response = await deleteChallenge(challenge._id);
+
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    };
     const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (challenge._id === "") {
@@ -145,7 +162,10 @@ export default ({ challenge }: Props) => {
                     </div>
                     <div className=" justify-content-between d-flex">
                         <button className="btn btn-info btn-md">Update</button>
-                        <button className="btn btn-danger btn-md">
+                        <button
+                            className="btn btn-danger btn-md"
+                            onClick={handleDelete}
+                        >
                             Delete
                         </button>
                     </div>
