@@ -14,8 +14,11 @@ export default () => {
         solved: null,
     });
     useEffect(() => {
-        privateProfile().then((profile) => setData(profile));
-    });
+        (async () => {
+            const resp = await privateProfile();
+            setData(resp);
+        })();
+    }, []);
     return (
         <>
             <div className="row">

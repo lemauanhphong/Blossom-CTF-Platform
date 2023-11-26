@@ -1,10 +1,11 @@
 import Profile from "../components/Profile";
 import NavBar from "../components/NavBar";
 import { navBarItems } from "../utils";
-
-export default () => {
-    const isLoggedIn = "true";
-    const isAdmin = null;
+interface Props {
+    isLoggedIn: string | null;
+    isAdmin: string | null;
+}
+export default ({ isLoggedIn, isAdmin }: Props) => {
     return (
         <>
             <NavBar
