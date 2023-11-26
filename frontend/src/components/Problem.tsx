@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { addChallenge, updateChallenge } from "../api/Admin";
+import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
 import Swal from "sweetalert2";
 interface Problem {
     _id: string;
@@ -51,12 +51,12 @@ export default ({ challenge }: Props) => {
             showCancelButton: true,
             confirmButtonText: "Don't",
             denyButtonText: `Delete`,
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
-                // const response = await deleteChallenge(challenge._id);
-
-                Swal.fire("Changes are not saved", "", "info");
+                const response = await deleteChallenge(challenge._id);
+                // Swal.fire("Changes are not saved", "", "info");
+                console.log(response);
             }
         });
     };
@@ -82,7 +82,7 @@ export default ({ challenge }: Props) => {
                 score: score,
             });
             console.log(response);
-            if (response.msp == "ok") {
+            if (response.msg == "Challenge updated") {
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
