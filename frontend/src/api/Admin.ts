@@ -11,5 +11,6 @@ export const updateChallenge = async (challenge: any) => {
     return (await request("PATCH", "/admin/challs", challenge)).data;
 };
 export const deleteChallenge = async (_id: string) => {
+    console.log(_id);
     return (await request("DELETE", "/admin/challs/" + _id)).data;
 };

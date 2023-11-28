@@ -12,8 +12,9 @@ interface Problem {
 }
 interface Props {
     challenge: Problem;
+    onUpdate: any;
 }
-export default ({ challenge }: Props) => {
+export default ({ challenge, onUpdate }: Props) => {
     const [flag, setFlag] = useState(challenge.flag);
     const handleFlagChange = useCallback(
         (e: any) => setFlag(e.target.value),
@@ -55,15 +56,32 @@ export default ({ challenge }: Props) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
                 const response = await deleteChallenge(challenge._id);
-                // Swal.fire("Changes are not saved", "", "info");
                 console.log(response);
+                if (response.msg == "Challenge deleted") {
+                    await Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Problem deleted",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                } else {
+                    await Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: response.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
             }
         });
+        onUpdate();
     };
     const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (challenge._id === "") {
-            await addChallenge({
+            const response = await addChallenge({
                 category: category,
                 content: description,
                 files: [],
@@ -71,6 +89,24 @@ export default ({ challenge }: Props) => {
                 name: name,
                 score: score,
             });
+            console.log(response);
+            if (response.msg == "Challenge added") {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Problem added successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            } else {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
         } else {
             const response = await updateChallenge({
                 _id: challenge._id,
@@ -83,7 +119,7 @@ export default ({ challenge }: Props) => {
             });
             console.log(response);
             if (response.msg == "Challenge updated") {
-                Swal.fire({
+                await Swal.fire({
                     position: "top-end",
                     icon: "success",
                     title: "Problem updated successfully",
@@ -91,8 +127,16 @@ export default ({ challenge }: Props) => {
                     timer: 1500,
                 });
             } else {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
         }
+        onUpdate();
     };
     return (
         <div className="row m-3">
