@@ -1,17 +1,46 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { privateProfile } from "../api/Profile";
 interface Profile {
-    _id: string | null;
-    username: string | null;
-    score: number | null;
-    solved: any | null;
+    _id: string;
+    username: string;
+    score: number;
+    solved: SolveChallenge[];
+    rank: number;
 }
+interface SolveChallenge {
+    category: string;
+    challenge: string;
+    score: number;
+    time: string;
+}
+const placementString = (placement: number) => {
+    let placementStr = String(placement);
+    if (placement >= 11 && placement <= 13) {
+        placementStr += "th place";
+    } else {
+        switch (placement % 10) {
+            case 1:
+                placementStr += "st place";
+                break;
+            case 2:
+                placementStr += "nd place";
+                break;
+            case 3:
+                placementStr += "rd place";
+                break;
+            default:
+                placementStr += "th place";
+        }
+    }
+    return placementStr;
+};
 export default () => {
     const [data, setData] = useState<Profile>({
-        _id: null,
-        username: null,
-        score: null,
-        solved: null,
+        _id: "",
+        username: "",
+        score: 0,
+        solved: [],
+        rank: Infinity,
     });
     useEffect(() => {
         (async () => {
@@ -19,6 +48,11 @@ export default () => {
             setData(resp);
         })();
     }, []);
+    const [username, setUsername] = useState(data.username);
+    const handleUsernameChange = useCallback(
+        (e: any) => setUsername(e.target.value),
+        []
+    );
     return (
         <>
             <div className="row">
@@ -38,8 +72,9 @@ export default () => {
                                         </div>
                                         <input
                                             className="form-control text-light custom-color-999999-placeholder bg-rctf"
-                                            value="Team name"
+                                            value={username}
                                             placeholder="Team name"
+                                            onChange={handleUsernameChange}
                                         ></input>
                                     </div>
 
@@ -101,7 +136,7 @@ export default () => {
                                             <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
                                         </svg>
                                     </span>
-                                    Unranked
+                                    {placementString(data.rank)}
                                 </p>
                             </div>
                         </div>
@@ -109,9 +144,59 @@ export default () => {
 
                     <div className="card">
                         <div className="content text-light text-center">
-                            <h5 className="mt-4 mb-4 p-2">
-                                This team has no solves
-                            </h5>
+                            {data.solved.length === 0 ? (
+                                <h5 className="mt-4 mb-4 p-2">
+                                    This team has no solves
+                                </h5>
+                            ) : (
+                                <div>
+                                    <h5 className="card-title mt-4 mb-4">
+                                        Solves
+                                    </h5>
+                                    <div className="col-12 rounded ">
+                                        <table className="table table-hover table-dark mt-3 ">
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-center">
+                                                        Category
+                                                    </th>
+                                                    <th className="text-start">
+                                                        Challenge
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Solve time
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Points
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {data.solved.map(
+                                                    (solve, index) => (
+                                                        <tr key={index}>
+                                                            <td className="text-center">
+                                                                {solve.category}
+                                                            </td>
+                                                            <td className="text-start">
+                                                                {
+                                                                    solve.challenge
+                                                                }
+                                                            </td>
+                                                            <td className="text-center">
+                                                                {solve.time}
+                                                            </td>
+                                                            <td className="text-center">
+                                                                {solve.score}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

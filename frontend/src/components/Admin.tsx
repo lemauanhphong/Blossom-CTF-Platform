@@ -1,5 +1,5 @@
 import Problem from "./Problem";
-import { getChallenges, updateChallenge } from "../api/Admin";
+import { getChallenges } from "../api/Admin";
 import { useCallback, useEffect, useState } from "react";
 interface Problem {
     _id: string;
@@ -27,11 +27,11 @@ export default () => {
     useEffect(() => {
         fetchChallenges();
     }, []);
-    let completed_challenges: Problem[] = [...challenges, SAMPLE_CHALLENGE];
+    const completed_challenges: Problem[] = [...challenges, SAMPLE_CHALLENGE];
     const update = useCallback(() => {
         fetchChallenges();
-        completed_challenges = [...challenges, SAMPLE_CHALLENGE];
-    }, [completed_challenges]);
+        // completed_challenges = [...challenges, SAMPLE_CHALLENGE];
+    }, []);
     // console.log(challenges);
 
     return (

@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { backend } from "../config";
 import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
 import Swal from "sweetalert2";
 interface Problem {
@@ -13,6 +14,10 @@ interface Problem {
 interface Props {
     challenge: Problem;
     onUpdate: any;
+}
+interface File {
+    fileid: string;
+    filename: string;
 }
 export default ({ challenge, onUpdate }: Props) => {
     const [flag, setFlag] = useState(challenge.flag);
@@ -44,6 +49,11 @@ export default ({ challenge, onUpdate }: Props) => {
         (e: any) => setName(e.target.value),
         []
     );
+    const [files, setFiles] = useState<File[]>(challenge.files);
+    const handleRemoveFile = (file: File) => async () => {
+        const newFiles = files.filter((f) => f !== file);
+        setFiles(newFiles);
+    };
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         Swal.fire({
@@ -74,9 +84,9 @@ export default ({ challenge, onUpdate }: Props) => {
                         timer: 1500,
                     });
                 }
+                onUpdate();
             }
         });
-        onUpdate();
     };
     const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -84,7 +94,7 @@ export default ({ challenge, onUpdate }: Props) => {
             const response = await addChallenge({
                 category: category,
                 content: description,
-                files: [],
+                files: files,
                 flag: flag,
                 name: name,
                 score: score,
@@ -98,6 +108,12 @@ export default ({ challenge, onUpdate }: Props) => {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                setFlag("");
+                setDescription("");
+                setCategory("");
+                setName("");
+                setScore(0);
+                // setFile([]);
             } else {
                 await Swal.fire({
                     position: "top-end",
@@ -112,7 +128,7 @@ export default ({ challenge, onUpdate }: Props) => {
                 _id: challenge._id,
                 category: category,
                 content: description,
-                files: [],
+                files: files,
                 flag: flag,
                 name: name,
                 score: score,
@@ -197,6 +213,39 @@ export default ({ challenge, onUpdate }: Props) => {
                                 onChange={handleFlagChange}
                             />
                         </div>
+                        {files.length !== 0 && (
+                            <div>
+                                <p className="mb-0">Downloads</p>
+                                <div className="container">
+                                    {files.map((file: File) => {
+                                        return (
+                                            <div
+                                                key={file.fileid}
+                                                className="d-inline-flex me-2 mb-2 badge bg-black"
+                                            >
+                                                <a
+                                                    href={`${backend}/files/${file.fileid}`}
+                                                    className="fs-6"
+                                                >
+                                                    {file.filename}
+                                                </a>
+                                                <div
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    className="p-1 ms-1 hover-zoom"
+                                                    onClick={handleRemoveFile(
+                                                        file
+                                                    )}
+                                                >
+                                                    X
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                         <div>
                             <input
                                 type="file"
