@@ -72,7 +72,29 @@ function App() {
                                 isAdmin={isAdmin}
                             />
                         }
-                    />
+                    >
+                        {/* Nested route for "/profile" */}
+                        <Route
+                            index
+                            element={
+                                <Profile
+                                    isLoggedIn={isLoggedIn}
+                                    isAdmin={isAdmin}
+                                />
+                            }
+                        />
+                        {/* Nested route for "/profile/:id" */}
+                        <Route
+                            path=":id"
+                            element={
+                                <Profile
+                                    isLoggedIn={isLoggedIn}
+                                    isAdmin={isAdmin}
+                                />
+                            }
+                        />
+                    </Route>
+
                     <Route path="/logout" element={<Logout />} />
                 </Routes>
             </BrowserRouter>
