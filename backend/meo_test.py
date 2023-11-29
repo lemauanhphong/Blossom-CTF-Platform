@@ -1,5 +1,5 @@
-import random
 import json
+import random
 import string
 from base64 import b64encode
 from pprint import pprint
@@ -55,7 +55,6 @@ class Api:
 
     def update_chall(self, chall):
         r = self.s.patch(TARGET + "/admin/challs", json=chall)
-        print(r.text)
         return r.json()
 
     def delete_chall(self, _id):
@@ -63,7 +62,10 @@ class Api:
         return r.json()
 
     def get_profile(self, uid=""):
-        r = self.s.get(TARGET + "/profile" + uid)
+        if uid:
+            r = self.s.get(TARGET + "/profile/" + uid)
+        else:
+            r = self.s.get(TARGET + "/profile")
         return r.json()
 
     def scores(self):
@@ -112,12 +114,12 @@ def populate_scoreboard():
     user = Api("user", "user")
     user.login()
 
-    for _ in range(5):
+    for _ in range(10):
         pprint(admin.add_chall(generate_new_challs()))
 
     challs = admin.admin_get_challs()
 
-    for _ in range(5):
+    for _ in range(20):
         rand_user = Api()
         rand_user.register()
         rand_user.login()
@@ -152,8 +154,15 @@ def check_patch():
 if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
+<<<<<<< Updated upstream
+    populate_scoreboard()
+    pprint(user.scores())
+=======
     # populate_scoreboard()
     admin = Api("admin", "admin")
     admin.login()
     # pprint(admin.delete_chall("6562d6babcce1308c699504f"))
-    pprint(admin.admin_get_challs())
+    # pprint(admin.admin_get_challs())
+    pprint(user.scores())
+    pprint(user.get_profile("6567018392fe4b8156e2512f"))
+>>>>>>> Stashed changes

@@ -53,7 +53,6 @@ def get_categories():
     return categories
 
 
-# maintain total time for ranking
 @challs.route("/flag", methods=["POST"])
 @require_login
 @require_contest_running
@@ -88,13 +87,58 @@ def submit_flag():
                     "time": datetime.now(),
                 }
             )
-            User.update_one({"_id": session["uid"]}, {"$inc": {"solves": 1, "score": chall["score"]}})
+            User.update_one(
+                {"_id": session["uid"]},
+                {"$inc": {"solves": 1, "score": chall["score"], "totaltime": datetime.now().timestamp()}},
+            )
 
             # update rank
             User.aggregate(
                 [
-                    {"$setWindowFields": {"sortBy": {"score": -1}, "output": {"rank": {"$denseRank": {}}}}},
-                    {"$merge": {"into": "users", "on": "_id", "whenMatched": "replace"}},
+                    {"$match": {"role": "user"}},
+                    # group into docs field
+                    {
+                        "$group": {
+                            "_id": None,
+                            "docs": {
+                                "$push": {
+                                    "_id": "$_id",
+                                    "score": "$score",
+                                }
+                            },
+                        }
+                    },
+                    # unpack embed array
+                    {"$unwind": "$docs"},
+                    # docs is ROOT now
+                    {"$replaceWith": "$docs"},
+                    {"$sort": {"score": -1, "totaltime": 1}},
+                    {"$group": {"_id": None, "docs": {"$push": "$$ROOT"}}},
+                    {
+                        "$project": {
+                            "docs": {
+                                # with each fields
+                                "$map": {
+                                    "input": "$docs",
+                                    "in": {
+                                        # create new _id field equals to original _id in docs
+                                        "_id": "$$this._id",
+                                        # rank is the numerical order of current element plus one in previous sort stage (it is ROOT now)
+                                        "rank": {
+                                            "$add": [
+                                                {"$indexOfArray": ["$$ROOT.docs", "$$this"]},
+                                                1,
+                                            ]
+                                        },
+                                    },
+                                }
+                            }
+                        }
+                    },
+                    {"$unwind": "$docs"},
+                    {"$replaceWith": "$docs"},
+                    # merge current ROOT to original collection
+                    {"$merge": {"into": "users", "on": "_id"}},
                 ]
             )
 
