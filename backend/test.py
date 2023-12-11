@@ -1,4 +1,3 @@
-import json
 import random
 import string
 from base64 import b64encode
@@ -154,15 +153,5 @@ def check_patch():
 if __name__ == "__main__":
     user = Api("user", "user")
     user.login()
-<<<<<<< Updated upstream
     populate_scoreboard()
     pprint(user.scores())
-=======
-    # populate_scoreboard()
-    admin = Api("admin", "admin")
-    admin.login()
-    # pprint(admin.delete_chall("6562d6babcce1308c699504f"))
-    # pprint(admin.admin_get_challs())
-    pprint(user.scores())
-    pprint(user.get_profile("6567018392fe4b8156e2512f"))
->>>>>>> Stashed changes
