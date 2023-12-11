@@ -4,6 +4,7 @@ interface Score {
     _id: string;
     score: number;
     username: string;
+    rank: number;
 }
 export default () => {
     const [scores, setScores] = useState<Score[]>([]);
@@ -31,7 +32,7 @@ export default () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {scores.map((entry, index) => (
+                                {scores.filter((entry) => entry.rank != 0).map((entry, index) => (
                                     <tr key={index}>
                                         <td className="text-center">
                                             {index + 1}

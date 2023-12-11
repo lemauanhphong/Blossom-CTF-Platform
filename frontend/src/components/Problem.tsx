@@ -2,6 +2,12 @@ import { useCallback, useState } from "react";
 import { backend } from "../config";
 import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
 import Swal from "sweetalert2";
+const encodeFile = (file: any) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', () => resolve(reader.result));
+    reader.addEventListener('error', error => reject(error));
+})
 interface Problem {
     _id: string;
     flag: string;
@@ -18,6 +24,24 @@ interface Props {
 interface File {
     fileid: string;
     filename: string;
+}
+const successAlert = async (msg: string) => {
+    await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: msg,
+        showConfirmButton: false,
+        timer: 1500,
+    });
+}
+const errorAlert = async (msg: string) => {
+    await Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: msg,
+        showConfirmButton: false,
+        timer: 1500,
+    });
 }
 export default ({ challenge, onUpdate }: Props) => {
     const [flag, setFlag] = useState(challenge.flag);
@@ -50,9 +74,64 @@ export default ({ challenge, onUpdate }: Props) => {
         []
     );
     const [files, setFiles] = useState<File[]>(challenge.files);
+    const handleFileUpload = useCallback(
+        async (e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            if (challenge._id === "") {
+                errorAlert("Create challenge first");
+            }
+            else {
+                if (e.target.files) {
+                    console.log(e.target.files);
+                    const fileData = await Promise.all(
+                        Array.from(e.target.files).map(async (file) => {
+                            const data = await encodeFile(file);
+                            return {
+                                filename: file.name,
+                                data: (data as string).split(',')[1]
+                            };
+                        })
+                    );
+                    const response = await updateChallenge({
+                        _id: challenge._id,
+                        category: category,
+                        content: description,
+                        files: fileData,
+                        flag: flag,
+                        name: name,
+                        score: score,
+                    });
+                    if (response.msg == "Challenge updated") {
+                        successAlert(response.msg);
+                    } else {
+                        errorAlert(response.msg);
+                    }
+                    onUpdate();
+                }
+            }
+            e.target.value = '';
+
+        }, []
+    )
     const handleRemoveFile = (file: File) => async () => {
         const newFiles = files.filter((f) => f !== file);
         setFiles(newFiles);
+        console.log(file.fileid);
+        const response = await updateChallenge({
+            _id: challenge._id,
+            category: category,
+            content: description,
+            files_remove: [file.fileid],
+            flag: flag,
+            name: name,
+            score: score,
+        });
+        if (response.msg == "Challenge updated") {
+            successAlert(response.msg);
+        } else {
+            errorAlert(response.msg);
+        }
+
     };
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -68,21 +147,9 @@ export default ({ challenge, onUpdate }: Props) => {
                 const response = await deleteChallenge(challenge._id);
                 console.log(response);
                 if (response.msg == "Challenge deleted") {
-                    await Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Problem deleted",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
+                    successAlert(response.msg);
                 } else {
-                    await Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        title: response.msg,
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
+                    errorAlert(response.msg);
                 }
                 onUpdate();
             }
@@ -94,20 +161,13 @@ export default ({ challenge, onUpdate }: Props) => {
             const response = await addChallenge({
                 category: category,
                 content: description,
-                files: files,
+                files: [],
                 flag: flag,
                 name: name,
                 score: score,
             });
-            console.log(response);
             if (response.msg == "Challenge added") {
-                await Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Problem added successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                successAlert(response.msg);
                 setFlag("");
                 setDescription("");
                 setCategory("");
@@ -115,41 +175,23 @@ export default ({ challenge, onUpdate }: Props) => {
                 setScore(0);
                 // setFile([]);
             } else {
-                await Swal.fire({
-                    position: "top-end",
-                    icon: "error",
-                    title: response.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                errorAlert(response.msg);
             }
         } else {
             const response = await updateChallenge({
                 _id: challenge._id,
                 category: category,
                 content: description,
-                files: files,
+                files: [],
                 flag: flag,
                 name: name,
                 score: score,
             });
             console.log(response);
             if (response.msg == "Challenge updated") {
-                await Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Problem updated successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                successAlert(response.msg);
             } else {
-                await Swal.fire({
-                    position: "top-end",
-                    icon: "error",
-                    title: response.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                errorAlert(response.msg);
             }
         }
         onUpdate();
@@ -246,10 +288,12 @@ export default ({ challenge, onUpdate }: Props) => {
                                 </div>
                             </div>
                         )}
-                        <div>
+                        <div className=" input-control">
                             <input
                                 type="file"
                                 className="input-group input-group-text bg-dark text-light text-start mb-3"
+                                multiple
+                                onChange={handleFileUpload}
                             />
                         </div>
                     </div>

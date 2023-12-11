@@ -16,6 +16,8 @@ interface SolveChallenge {
     time: string;
 }
 const placementString = (placement: number) => {
+    if (placement == 0)
+        return "Unranked";
     let placementStr = String(placement);
     if (placement >= 11 && placement <= 13) {
         placementStr += "th place";
