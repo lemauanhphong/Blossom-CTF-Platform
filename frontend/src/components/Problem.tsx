@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
-import { addChallenge, updateChallenge } from "../api/Admin";
+import { backend } from "../config";
+import { addChallenge, updateChallenge, deleteChallenge } from "../api/Admin";
 import Swal from "sweetalert2";
 interface Problem {
     _id: string;
@@ -12,8 +13,13 @@ interface Problem {
 }
 interface Props {
     challenge: Problem;
+    onUpdate: any;
 }
-export default ({ challenge }: Props) => {
+interface File {
+    fileid: string;
+    filename: string;
+}
+export default ({ challenge, onUpdate }: Props) => {
     const [flag, setFlag] = useState(challenge.flag);
     const handleFlagChange = useCallback(
         (e: any) => setFlag(e.target.value),
@@ -43,6 +49,11 @@ export default ({ challenge }: Props) => {
         (e: any) => setName(e.target.value),
         []
     );
+    const [files, setFiles] = useState<File[]>(challenge.files);
+    const handleRemoveFile = (file: File) => async () => {
+        const newFiles = files.filter((f) => f !== file);
+        setFiles(newFiles);
+    };
     const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         Swal.fire({
@@ -51,39 +62,80 @@ export default ({ challenge }: Props) => {
             showCancelButton: true,
             confirmButtonText: "Don't",
             denyButtonText: `Delete`,
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
-                // const response = await deleteChallenge(challenge._id);
-
-                Swal.fire("Changes are not saved", "", "info");
+                const response = await deleteChallenge(challenge._id);
+                console.log(response);
+                if (response.msg == "Challenge deleted") {
+                    await Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Problem deleted",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                } else {
+                    await Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: response.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
+                onUpdate();
             }
         });
     };
     const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (challenge._id === "") {
-            await addChallenge({
+            const response = await addChallenge({
                 category: category,
                 content: description,
-                files: [],
-                flag: flag,
-                name: name,
-                score: score,
-            });
-        } else {
-            const response = await updateChallenge({
-                _id: challenge._id,
-                category: category,
-                content: description,
-                files: [],
+                files: files,
                 flag: flag,
                 name: name,
                 score: score,
             });
             console.log(response);
-            if (response.msp == "ok") {
-                Swal.fire({
+            if (response.msg == "Challenge added") {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Problem added successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                setFlag("");
+                setDescription("");
+                setCategory("");
+                setName("");
+                setScore(0);
+                // setFile([]);
+            } else {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        } else {
+            const response = await updateChallenge({
+                _id: challenge._id,
+                category: category,
+                content: description,
+                files: files,
+                flag: flag,
+                name: name,
+                score: score,
+            });
+            console.log(response);
+            if (response.msg == "Challenge updated") {
+                await Swal.fire({
                     position: "top-end",
                     icon: "success",
                     title: "Problem updated successfully",
@@ -91,8 +143,16 @@ export default ({ challenge }: Props) => {
                     timer: 1500,
                 });
             } else {
+                await Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
         }
+        onUpdate();
     };
     return (
         <div className="row m-3">
@@ -153,6 +213,39 @@ export default ({ challenge }: Props) => {
                                 onChange={handleFlagChange}
                             />
                         </div>
+                        {files.length !== 0 && (
+                            <div>
+                                <p className="mb-0">Downloads</p>
+                                <div className="container">
+                                    {files.map((file: File) => {
+                                        return (
+                                            <div
+                                                key={file.fileid}
+                                                className="d-inline-flex me-2 mb-2 badge bg-black"
+                                            >
+                                                <a
+                                                    href={`${backend}/files/${file.fileid}`}
+                                                    className="fs-6"
+                                                >
+                                                    {file.filename}
+                                                </a>
+                                                <div
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    className="p-1 ms-1 hover-zoom"
+                                                    onClick={handleRemoveFile(
+                                                        file
+                                                    )}
+                                                >
+                                                    X
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                         <div>
                             <input
                                 type="file"

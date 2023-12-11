@@ -1,6 +1,6 @@
 import Problem from "./Problem";
 import { getChallenges } from "../api/Admin";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 interface Problem {
     _id: string;
     flag: string;
@@ -21,17 +21,27 @@ const SAMPLE_CHALLENGE: Problem = {
 };
 export default () => {
     const [challenges, setChallenges] = useState([]);
+    const fetchChallenges = async () => {
+        setChallenges(await getChallenges());
+    };
     useEffect(() => {
-        (async () => {
-            setChallenges(await getChallenges());
-        })();
+        fetchChallenges();
+    }, []);
+    const completed_challenges: Problem[] = [...challenges, SAMPLE_CHALLENGE];
+    const update = useCallback(() => {
+        fetchChallenges();
+        // completed_challenges = [...challenges, SAMPLE_CHALLENGE];
     }, []);
     // console.log(challenges);
-    const completed_challenges: Problem[] = [...challenges, SAMPLE_CHALLENGE];
+
     return (
         <>
             {completed_challenges.map((challenge: Problem) => (
-                <Problem challenge={challenge} key={challenge._id} />
+                <Problem
+                    challenge={challenge}
+                    key={challenge._id}
+                    onUpdate={update}
+                />
             ))}
         </>
     );
