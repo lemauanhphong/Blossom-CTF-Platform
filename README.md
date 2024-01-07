@@ -1,2 +1,2 @@
-# Blossom-CTF-Platform
+# Blossom-CTF-Platform 🌼
 Web Application Programming Project
